@@ -1,0 +1,14 @@
+# Python chache files
+__pycache__
+
+# Editable packages files
+*.egg-info
+
+# Pytest cache
+.pytest_cache
+
+# Logs
+Logs
+
+# Config
+config.json
