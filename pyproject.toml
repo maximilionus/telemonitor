@@ -12,7 +12,6 @@ python = "^3.8"
 aiogram = "^2.9.2"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
 flake8 = "^3.8.3"
 
 [build-system]
