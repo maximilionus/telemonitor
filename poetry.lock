@@ -145,6 +145,14 @@ version = "2020.1"
 
 [[package]]
 category = "main"
+description = "Cross-platform uptime library"
+name = "uptime"
+optional = false
+python-versions = "*"
+version = "3.0.1"
+
+[[package]]
+category = "main"
 description = "Yet another URL library"
 name = "yarl"
 optional = false
@@ -156,7 +164,7 @@ idna = ">=2.0"
 multidict = ">=4.0"
 
 [metadata]
-content-hash = "7d0830efcf24cf6f300483ce9d7e697b460f8640237cfab627fe06cae5a23330"
+content-hash = "5fe43a6ab81d77eb7eca43e8eea27223a2de3633fce78b8ac8928d99c3aecafc"
 python-versions = "^3.8"
 
 [metadata.files]
@@ -240,6 +248,9 @@ pyflakes = [
 pytz = [
     {file = "pytz-2020.1-py2.py3-none-any.whl", hash = "sha256:a494d53b6d39c3c6e44c3bec237336e14305e4f29bbf800b599253057fbb79ed"},
     {file = "pytz-2020.1.tar.gz", hash = "sha256:c35965d010ce31b23eeb663ed3cc8c906275d6be1a34393a1d73a41febf4a048"},
+]
+uptime = [
+    {file = "uptime-3.0.1.tar.gz", hash = "sha256:7c300254775b807ce46e3dcbcda30aa3b9a204b9c57a7ac1e79ee6dbe3942973"},
 ]
 yarl = [
     {file = "yarl-1.4.2-cp35-cp35m-macosx_10_13_x86_64.whl", hash = "sha256:3ce3d4f7c6b69c4e4f0704b32eca8123b9c58ae91af740481aa57d7857b5e41b"},

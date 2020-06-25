@@ -1,13 +1,11 @@
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import bold, code
-from aiogram.types import ParseMode
 
-from Telemonitor import helpers as h
-from Telemonitor import __version__
+from Telemonitor import helpers as h, \
+    __version__
 
 
-PARSE_MODE = ParseMode.MARKDOWN_V2
-
+# Initialization
 h.init_logger()
 
 cfg = h.TM_Config().get()
@@ -16,13 +14,21 @@ api_token = cfg["api_key"]
 bot = Bot(token=api_token)
 dp = Dispatcher(bot)
 
+# Inline keyboard for controls
+ikb = h.TM_ControlInlineKB(bot, dp)
+
+# Handlers
+
 
 @dp.message_handler(commands=['start'])
 async def __command_start(message: types.Message):
     if wls.is_whitelisted(message):
-        await bot.send_message(
-            message.from_user.id, f'{bold("Welcome to the Telemonitor control panel.")}\nVersion: {code(__version__)}\n',
-            parse_mode=PARSE_MODE
+        await message.reply(
+            f'{bold("Welcome to the Telemonitor control panel.")}\nVersion: {code(__version__)}\n',
+            reply=False,
+            parse_mode=h.PARSE_MODE,
+            reply_markup=ikb.get_keyboard()
         )
+
 
 executor.start_polling(dp)
