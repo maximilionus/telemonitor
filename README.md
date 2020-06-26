@@ -22,11 +22,12 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
    ```bash
    poetry install --no-dev
    ```
-3. After all packages successfully installed, run:
+3. Go to `./Telemonitor/`
+4. After all packages successfully installed, run:
    ```bash
    poetry run telemonitor-start
    ```
-4. On the first start `Telemonitor` will generate `config.json` *([About Config](#configuration-file))* file in `./Telemonitor/` and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
+5. On the first start `Telemonitor` will generate `config.json` *([About Config](#configuration-file))* file in current dir and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
 
 ## Commands
 ```
