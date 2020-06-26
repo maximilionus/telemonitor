@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import platform
+from enum import Enum
 from sys import exit, \
     platform as sys_platform
 from time import strftime
@@ -32,26 +33,26 @@ def init_logger():
 
 def construct_sysinfo() -> str:
     __uname = platform.uname()
-    __sysname = __uname[0]
-    __architecture = __uname[4]
+    __sysname = f"{__uname[0]} {__uname[4]}"
     __uptime_raw = uptime()
     __uptime = f"{int(__uptime_raw / (24 * 3600))}:{int(__uptime_raw / 3600)}:{int(__uptime_raw / 60 % 60)}:{int(__uptime_raw % 60)}"
     __userhost = f"{os.path.basename(os.path.expanduser('~'))}@{__uname[1]}"
 
-    string_final = f"{bold('System')}: {code(__sysname)}\n{bold('Architecture')}: {code(__architecture)}\n{bold('Uptime')} {italic('dd:hh:mm:ss')}: {code(__uptime)}\n{bold('User@Host')}: {code(__userhost)}"
+    string_final = f"{bold('System')}: {code(__sysname)}\n{bold('Uptime')} {italic('dd:hh:mm:ss')}: {code(__uptime)}\n{bold('User@Host')}: {code(__userhost)}"
     return string_final
 
 
 class TM_ControlInlineKB:
     def __init__(self, bot: Bot, dispatcher: Dispatcher):
         self.inline_kb = InlineKeyboardMarkup()
-        self.btn_get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
-        self.btn_reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
-        self.btn_shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
 
-        self.inline_kb.add(self.btn_get_sysinfo)
-        self.inline_kb.add(self.btn_reboot)
-        self.inline_kb.add(self.btn_shutdown)
+        class Buttons(Enum):
+            get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
+            reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
+            shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
+
+        for button in Buttons:
+            self.inline_kb.add(button.value)
 
         @dispatcher.callback_query_handler()
         async def __callback_sysinfo_press(callback_query: types.CallbackQuery):
