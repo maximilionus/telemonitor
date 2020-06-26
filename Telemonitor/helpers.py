@@ -56,6 +56,9 @@ class TM_ControlInlineKB:
         @dispatcher.callback_query_handler()
         async def __callback_sysinfo_press(callback_query: types.CallbackQuery):
             cb = callback_query.data
+
+            if not TM_Whitelist.is_whitelisted(callback_query.from_user.id): return False
+
             if cb == 'button-sysinfo-press':
                 await bot.answer_callback_query(callback_query.id)
                 message = construct_sysinfo()
@@ -83,9 +86,9 @@ class TM_ControlInlineKB:
 
 class TM_Whitelist:
     @classmethod
-    def is_whitelisted(cls, message: types.Message):
+    def is_whitelisted(cls, user_id: int):
         users = cls.get_whitelist()
-        if message.from_user.id in users:
+        if user_id in users:
             return True
         else:
             return False
