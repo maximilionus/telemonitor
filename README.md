@@ -35,7 +35,7 @@ start - Start the bot
 
 ## Configuration File
 > This configuration file will be generated on first start in `./Telemonitor/` and needs to be modified.
-```json
+```jsonc
 {
     "api_key": "123:token__here", // Telegram bot api token
     "whitelisted_users": [12345, 54321, 224414] // Array with all whitelisted users ids
