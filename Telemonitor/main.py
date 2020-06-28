@@ -9,13 +9,6 @@ from Telemonitor import helpers as h, \
 
 
 def run():
-    async def on_start_message(dp):
-        for user in wls.get_whitelist():
-            try:
-                await bot.send_message(user, code("System is booted"), parse_mode=h.PARSE_MODE)
-            except Exception as e:
-                logger.error(f"Can't send on-start message to user [{user}]: < {e} >")
-
     # Initialization
     chdir(path.dirname(__file__))
     h.init_logger()
@@ -43,4 +36,9 @@ def run():
 
     print('Bot is starting')
     logger.info("Bot is starting")
-    executor.start_polling(dp, skip_updates=True, on_startup=on_start_message)
+    executor.start_polling(
+        dp,
+        skip_updates=True,
+        on_startup=lambda _: h.TM_Whitelist.send_to_all(bot, code("System was booted")),
+        on_shutdown=lambda _: h.TM_Whitelist.send_to_all(bot, code("System is shutting down"))
+    )

@@ -56,26 +56,23 @@ class TM_ControlInlineKB:
 
         @dispatcher.callback_query_handler()
         async def __callback_sysinfo_press(callback_query: types.CallbackQuery):
-            cb = callback_query.data
-
             if not TM_Whitelist.is_whitelisted(callback_query.from_user.id): return False
 
-            if cb == 'button-sysinfo-press':
+            data = callback_query.data
+            if data == 'button-sysinfo-press':
                 await bot.answer_callback_query(callback_query.id)
                 message = construct_sysinfo()
                 await bot.send_message(callback_query.from_user.id, message, parse_mode=PARSE_MODE)
 
-            elif cb == 'button-reboot-press':
-                await bot.answer_callback_query(callback_query.id)
-                await bot.send_message(callback_query.from_user.id, code("Rebooting the system..."), parse_mode=PARSE_MODE)
+            elif data == 'button-reboot-press':
+                await bot.answer_callback_query(callback_query.id, 'Rebooting the system...')
 
                 plf = sys_platform
                 if plf == 'linux': subprocess.call(['reboot', 'now'])
                 elif plf == 'win32': subprocess.call(['shutdown', '-t', '0', '-r', '-f'])
 
-            elif cb == 'button-shutdown-press':
-                await bot.answer_callback_query(callback_query.id)
-                await bot.send_message(callback_query.from_user.id, code("Shutting down the system..."), parse_mode=PARSE_MODE)
+            elif data == 'button-shutdown-press':
+                await bot.answer_callback_query(callback_query.id, "Shutting down the system...")
 
                 plf = sys_platform
                 if plf == 'linux': subprocess.call(['shutdown', 'now'])
@@ -86,6 +83,8 @@ class TM_ControlInlineKB:
 
 
 class TM_Whitelist:
+    __logger = logging.getLogger("TM.Whitelist")
+
     @classmethod
     def is_whitelisted(cls, user_id: int):
         users = cls.get_whitelist()
@@ -97,6 +96,23 @@ class TM_Whitelist:
     @staticmethod
     def get_whitelist():
         return TM_Config.get()["whitelisted_users"]
+
+    @classmethod
+    async def send_to_all(cls, bot: object, message: str):
+        """ Send message to all users in whitelist
+
+        Args:
+            bot (object): aiogram bot object
+            message (str): Text of the message
+
+        Returns:
+            None
+        """
+        for user in cls.get_whitelist():
+            try:
+                await bot.send_message(user, message, parse_mode=PARSE_MODE)
+            except Exception as e:
+                cls.__logger.error(f"Can't send message to whitelisted user [{user}]: < {e} >")
 
 
 class TM_Config:
