@@ -9,7 +9,7 @@ from Telemonitor import helpers as h, \
 
 
 def run():
-    async def on_start_message():
+    async def on_start_message(dp):
         for user in wls.get_whitelist():
             try:
                 await bot.send_message(user, code("System is booted"), parse_mode=h.PARSE_MODE)
@@ -43,5 +43,4 @@ def run():
 
     print('Bot is starting')
     logger.info("Bot is starting")
-    dp.loop.create_task(on_start_message())
-    executor.start_polling(dp, skip_updates=True)
+    executor.start_polling(dp, skip_updates=True, on_startup=on_start_message)
