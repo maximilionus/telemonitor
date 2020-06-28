@@ -3,8 +3,9 @@
   - [Main Information](#main-information)
   - [Functionality](#functionality)
   - [How to run](#how-to-run)
-  - [Commands](#commands)
+  - [Bot Commands](#bot-commands)
   - [Configuration File](#configuration-file)
+  - [Logging](#logging)
 
 ## Main Information
 Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiogram) for system monitoring.
@@ -22,23 +23,25 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
    ```bash
    poetry install --no-dev
    ```
-3. Go to `./Telemonitor/`
-4. After all packages successfully installed, run:
+3. After all packages successfully installed, run:
    ```bash
-   poetry run telemonitor-start
+   poetry run telem
    ```
-5. On the first start `Telemonitor` will generate `config.json` *([About Config](#configuration-file))* file in current dir and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
+4. On the first start `Telemonitor` will generate `config.json` *([about Config](#configuration-file))* and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
 
-## Commands
+## Bot Commands
 ```
 start - Start the bot
 ```
 
 ## Configuration File
-> This configuration file will be generated on first start in `./Telemonitor/` and needs to be modified.
+> This configuration file will be generated on first start in `./Telemonitor/` directory and needs to be modified.
 ```jsonc
 {
     "api_key": "123:token__here", // Telegram bot api token
     "whitelisted_users": [12345, 54321, 224414] // Array with all whitelisted users ids
 }
 ```
+
+## Logging
+**Telemonitor** also supports logging with python `logging` module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`

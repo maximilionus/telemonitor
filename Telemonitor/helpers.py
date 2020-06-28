@@ -15,8 +15,8 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, \
     ParseMode
 from aiogram.utils.markdown import code, bold, italic
 
-DIR_LOG = os.path.abspath("./Logs")
-PATH_CFG = os.path.abspath("./config.json")
+DIR_LOG = "./Logs"
+PATH_CFG = "./config.json"
 PARSE_MODE = ParseMode.MARKDOWN_V2
 DEF_CFG = {
     "api_key": "",

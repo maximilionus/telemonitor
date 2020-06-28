@@ -1,3 +1,5 @@
+from os import chdir, path
+
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import bold, code
 
@@ -7,6 +9,7 @@ from Telemonitor import helpers as h, \
 
 def run():
     # Initialization
+    chdir(path.dirname(__file__))
     h.init_logger()
 
     cfg = h.TM_Config().get()
@@ -30,4 +33,5 @@ def run():
                 reply_markup=ikb.get_keyboard()
             )
 
+    print('Bot is starting')
     executor.start_polling(dp)
