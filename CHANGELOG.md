@@ -1,6 +1,7 @@
 # Telemonitor Changelog
 
 [**Unreleased**](https://github.com/maximilionus/Telemonitor)
+- Added on-start bot message to all whitelisted users.
 
 [**0.0.3**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.0.3) : 2020-06-28
 - **Sys Info** button message: Move `Architecture` to `System`
