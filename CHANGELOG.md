@@ -1,6 +1,8 @@
 # Telemonitor Changelog
 
 [**Unreleased**](https://github.com/maximilionus/Telemonitor)
+
+[**0.0.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.0.5) : 2020-06-29
 - Added text for `reboot` and `shutdown` buttons callback instead of message reply
 - Added message on bot exit
 - Unified send to whitelisted users function in TM_Whitelist
