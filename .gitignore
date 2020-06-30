@@ -1,14 +1,15 @@
 # Python chache files
 __pycache__
-
-# Editable packages files
-*.egg-info
-
-# Pytest cache
 .pytest_cache
+
+# Editable packages
+*.egg-info
 
 # Logs
 Logs
 
 # Config
-config.json
+Telemonitor/config.json
+
+# VS Code config
+.vscode

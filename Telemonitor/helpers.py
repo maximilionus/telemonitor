@@ -2,18 +2,15 @@ import json
 import logging
 import os
 import platform
-from enum import Enum
-from sys import exit, \
-    platform as sys_platform
+from sys import exit, platform as sys_platform
 from time import strftime
 import subprocess
 
 from uptime import uptime
-from aiogram import types, \
-    Dispatcher, Bot
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, \
-    ParseMode
+from aiogram import types, Dispatcher, Bot
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from aiogram.utils.markdown import code, bold, italic
+
 
 DIR_LOG = "./Logs"
 PATH_CFG = "./config.json"
@@ -46,13 +43,12 @@ class TM_ControlInlineKB:
     def __init__(self, bot: Bot, dispatcher: Dispatcher):
         self.inline_kb = InlineKeyboardMarkup()
 
-        class Buttons(Enum):
-            get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
-            reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
-            shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
+        self.btn_get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
+        self.btn_reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
+        self.btn_shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
 
-        for button in Buttons:
-            self.inline_kb.add(button.value)
+        self.inline_kb.add(self.btn_get_sysinfo)
+        self.inline_kb.row(self.btn_reboot, self.btn_shutdown)
 
         @dispatcher.callback_query_handler()
         async def __callback_sysinfo_press(callback_query: types.CallbackQuery):

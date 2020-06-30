@@ -1,6 +1,9 @@
 # Telemonitor Changelog
 
 [**Unreleased**](https://github.com/maximilionus/Telemonitor)
+- Changed main Inline Keyboard buttons position
+- Changed `/start` command reply message
+- Enhanced logging
 
 [**0.0.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.0.5) : 2020-06-29
 - Added text for `reboot` and `shutdown` buttons callback instead of message reply
