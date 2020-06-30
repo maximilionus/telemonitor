@@ -2,7 +2,7 @@ import json
 import logging
 import os
 import platform
-from sys import exit, platform as sys_platform
+from sys import platform as sys_platform
 from time import strftime
 import subprocess
 
@@ -63,16 +63,16 @@ class TM_ControlInlineKB:
             elif data == 'button-reboot-press':
                 await bot.answer_callback_query(callback_query.id, 'Rebooting the system...')
 
-                plf = sys_platform
-                if plf == 'linux': subprocess.call(['reboot', 'now'])
-                elif plf == 'win32': subprocess.call(['shutdown', '-t', '0', '-r', '-f'])
+                if sys_platform == 'linux': subprocess.run(['shutdown', '-r', 'now'])
+                elif sys_platform == 'darwin': subprocess.run(['shutdown', '-r', 'now'])
+                elif sys_platform == 'win32': subprocess.run(['shutdown', '/r', '/t', '0'])
 
             elif data == 'button-shutdown-press':
                 await bot.answer_callback_query(callback_query.id, "Shutting down the system...")
 
-                plf = sys_platform
-                if plf == 'linux': subprocess.call(['shutdown', 'now'])
-                elif plf == 'win32': subprocess.call(['shutdown', '-s', '-t', '0'])
+                if sys_platform == 'linux': subprocess.run(['shutdown', 'now'])
+                elif sys_platform == 'darwin': subprocess.run(['shutdown', '-h', 'now'])
+                elif sys_platform == 'win32': subprocess.run(['shutdown', '/s', '/t', '0'])
 
     def get_keyboard(self) -> object:
         return self.inline_kb

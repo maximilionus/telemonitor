@@ -1,8 +1,9 @@
 # Telemonitor Changelog
 
-[**Unreleased**](https://github.com/maximilionus/Telemonitor)
+[**0.1.5**-unreleased](https://github.com/maximilionus/Telemonitor)
+- Added `macOS` support for `Shutdown` and `Reboot` commands
 - Changed main Inline Keyboard buttons position
-- Changed `/start` command reply message
+- Changed `/start` command reply message a little bit
 - Enhanced logging
 
 [**0.0.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.0.5) : 2020-06-29
