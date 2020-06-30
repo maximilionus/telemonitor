@@ -46,10 +46,10 @@ This configuration file will be generated on first start in `./Telemonitor/` dir
 ## Supported Platforms
 All list of features and supported platforms.
 
-| OS →<br>Feature ↓     | Linux | Windows | macOS |
-| :-------------------- | :---- | :------ | :---- |
-| `System Information`  | ✓     | ✓       | ⍻     |
-| `Shutdown` & `Reboot` | ✓     | ✓       | ⍻     |
+| Platform →<br>Feature ↓ | Linux | Windows | macOS |
+| :---------------------- | :---- | :------ | :---- |
+| `System Information`    | ✓     | ✓       | ⍻     |
+| `Shutdown` & `Reboot`   | ✓     | ✓       | ⍻     |
 
 > *Legend*  
 > `✓` - Available  
