@@ -51,5 +51,10 @@ All list of features and supported platforms.
 | `System Information`  | ✓     | ✓       | ⍻     |
 | `Shutdown` & `Reboot` | ✓     | ✓       | ⍻     |
 
+> *Legend*  
+> `✓` - Available  
+> `⍻` - Available but not tested  
+> `✗` - Not available
+
 ## Logging
 **Telemonitor** also supports logging with python `logging` module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`
