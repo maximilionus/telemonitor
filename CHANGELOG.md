@@ -1,6 +1,7 @@
 # Telemonitor Changelog
 
 [**0.1.5**-unreleased](https://github.com/maximilionus/Telemonitor)
+- Full switch to [semantic versioning](https://semver.org/)
 - Added `macOS` support for `Shutdown` and `Reboot` commands
 - Changed main Inline Keyboard buttons position
 - Changed `/start` command reply message a little bit
