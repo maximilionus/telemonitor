@@ -27,7 +27,7 @@ def run():
     async def __command_start(message: types.Message):
         if TM_Whitelist.is_whitelisted(message.from_user.id):
             await message.reply(
-                bold("Welcome to the Telemonitor control panel."),
+                bold("Welcome to the Telemonitor control panel"),
                 reply=False,
                 parse_mode=h.PARSE_MODE,
                 reply_markup=ikb.get_keyboard()
