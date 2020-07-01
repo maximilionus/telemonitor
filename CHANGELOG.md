@@ -1,6 +1,8 @@
 # Telemonitor Changelog
 
 [Unreleased](https://github.com/maximilionus/Telemonitor)
+- Remove version information from `/start` command reply. Version is now shows in console on script boot.
+- Added automatic logs cleanup after exceeding the files limit. Look for const `MAX_LOGS` in [`helpers.py`](./Telemonitor/helpers.py)
 
 [**0.1.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.1.5)
 - Full switch to [semantic versioning](https://semver.org/)

@@ -12,6 +12,7 @@ from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from aiogram.utils.markdown import code, bold, italic
 
 
+MAX_LOGS = 30
 DIR_LOG = "./Logs"
 PATH_CFG = "./config.json"
 PARSE_MODE = ParseMode.MARKDOWN_V2
@@ -24,6 +25,13 @@ DEF_CFG = {
 def init_logger():
     if not os.path.isdir(DIR_LOG):
         os.makedirs(DIR_LOG)
+    else:
+        log_files = [f for f in os.listdir(DIR_LOG) if os.path.isfile(os.path.join(DIR_LOG, f))]
+        log_files_len = len(log_files)
+        if log_files_len > MAX_LOGS:
+            print(f"Clearing logs folder. {log_files_len} files will be removed")
+            for log_file in log_files:
+                os.remove(os.path.join(DIR_LOG, log_file))
     filename = f'{DIR_LOG}/TMLog_{strftime("%Y-%m-%d_%H-%M-%S")}.log'
     logging.basicConfig(filename=filename, format="[%(asctime)s][%(name)s][%(levelname)s]: %(message)s")
 
