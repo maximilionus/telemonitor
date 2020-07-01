@@ -27,13 +27,13 @@ def run():
     async def __command_start(message: types.Message):
         if wls.is_whitelisted(message.from_user.id):
             await message.reply(
-                f'{bold("Welcome to the Telemonitor control panel.")}\n\nVersion: {code(__version__)}\n',
+                bold("Welcome to the Telemonitor control panel."),
                 reply=False,
                 parse_mode=h.PARSE_MODE,
                 reply_markup=ikb.get_keyboard()
             )
 
-    print('Bot is starting')
+    print(f'Bot is starting. Version: {__version__}')
     executor.start_polling(
         dp,
         skip_updates=True,
