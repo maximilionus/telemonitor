@@ -120,6 +120,8 @@ class TM_Whitelist:
 
 
 class TM_Config:
+    __config = {}
+    __last_mod_time = None
     __logger = logging.getLogger("TM.Config")
 
     def __init__(self):
@@ -127,10 +129,6 @@ class TM_Config:
             self.create()
             print(f"Config file was generated in < {PATH_CFG} >.\nFirst, you need to configure its values and then run the script again.")
             exit()
-
-    @staticmethod
-    def is_exist() -> bool:
-        return True if os.path.isfile(PATH_CFG) else False
 
     @classmethod
     def create(cls):
@@ -140,6 +138,29 @@ class TM_Config:
 
     @classmethod
     def get(cls) -> dict:
-        with open(PATH_CFG, 'rt') as f:
-            cfg = json.load(f)
-        return cfg
+        if cls.is_modified():
+            with open(PATH_CFG, 'rt') as f:
+                cls.__config = json.load(f)
+            cls.__last_mod_time = os.path.getmtime(PATH_CFG)
+
+        return cls.__config
+
+    @classmethod
+    def is_modified(cls) -> bool:
+        """ Check if config file was modified from the last load.
+
+        Returns:
+            bool:
+                True - On first config request and if file was modified.
+                False - File is is up-to-date with loaded values.
+        """
+        if cls.__last_mod_time is None:
+            return True
+        else:
+            cfg_modtime = os.path.getmtime(PATH_CFG)
+            if cfg_modtime > cls.__last_mod_time: return True
+            else: return False
+
+    @staticmethod
+    def is_exist() -> bool:
+        return True if os.path.isfile(PATH_CFG) else False

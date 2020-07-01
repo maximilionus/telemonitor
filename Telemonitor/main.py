@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import bold, code
 
 from Telemonitor import helpers as h, __version__
+from Telemonitor.helpers import TM_Config, TM_Whitelist, TM_ControlInlineKB
 
 
 def run():
@@ -13,19 +14,18 @@ def run():
     logger = logging.getLogger('TM.Main')
     logger.info("Bot is starting")
 
-    cfg = h.TM_Config().get()
-    wls = h.TM_Whitelist()
+    cfg = TM_Config().get()
     api_token = cfg["api_key"]
     bot = Bot(token=api_token)
     dp = Dispatcher(bot)
 
     # Inline keyboard for controls
-    ikb = h.TM_ControlInlineKB(bot, dp)
+    ikb = TM_ControlInlineKB(bot, dp)
 
     # Handlers
     @dp.message_handler(commands=['start'])
     async def __command_start(message: types.Message):
-        if wls.is_whitelisted(message.from_user.id):
+        if TM_Whitelist.is_whitelisted(message.from_user.id):
             await message.reply(
                 bold("Welcome to the Telemonitor control panel."),
                 reply=False,
