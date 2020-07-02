@@ -2,6 +2,7 @@
 
 [**Unreleased**](https://github.com/maximilionus/Telemonitor)
 - Enhanced already imported modules usage
+- Added simple unit test for script version match
 
 [**0.2.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.2.5)
 - Added automatic logs cleanup after exceeding the log files limit. Look for const `MAX_LOGS` in [`helpers.py`](./Telemonitor/helpers.py)
