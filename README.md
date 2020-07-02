@@ -51,6 +51,7 @@ All list of features and supported platforms.
 | :---------------------- | :---- | :------ | :---- |
 | `System Information`    | ✓     | ✓       | ⍻     |
 | `Shutdown` & `Reboot`   | ✓     | ✓       | ⍻     |
+| `Uptime`                | ✓     | ✓       | ⍻     |
 
 > *Legend*  
 > `✓` - Available  
