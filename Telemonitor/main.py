@@ -37,6 +37,6 @@ def run():
     executor.start_polling(
         dp,
         skip_updates=True,
-        on_startup=lambda _: h.TM_Whitelist.send_to_all(bot, code("System was booted")),
-        on_shutdown=lambda _: h.TM_Whitelist.send_to_all(bot, code("System is shutting down"))
+        on_startup=lambda _: TM_Whitelist.send_to_all(bot, code("System was booted")),
+        on_shutdown=lambda _: TM_Whitelist.send_to_all(bot, code("System is shutting down"))
     )
