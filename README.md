@@ -38,9 +38,10 @@ start - Start the bot
 ```
 
 ## File Transfer System
-This feature allows you to transfer files **to** bot's host machine.
-> Note that all files will be stored on Telegram servers.  
-> Currently this system supports only `documents` and `images` transfer.
+This feature allows you to transfer files between bot's host machine and telegram user.
+> Note that **all transfered files will be stored on Telegram servers!**
+
+> Currently this system supports only `documents` and `images` transfer **only from** *whitelisted telegram user* to *bot's host machine*
 
 ### How to use
 - Simply send any `file`/`image` to bot from your client and you will receive notification when all files will be downloaded to host.
@@ -73,4 +74,4 @@ All list of features and supported platforms.
 > `✗` - Not available
 
 ## Logging
-**Telemonitor** also supports logging with python `logging` module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`
+**Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`

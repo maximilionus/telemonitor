@@ -2,8 +2,9 @@
 
 [**Unreleased**](https://github.com/maximilionus/Telemonitor)
 - Implemented file transfer system. Currently works only as `file`/`image` receiver.
-- Added new `bool` value `"enable_file_tranfer"` to `config.json`
-- Added new `bool` value `"state_notifications"` to `config.json`. [Read moar here](./README.md#configuration-file).
+- Added new params to `config.json`:
+  - `"enable_file_tranfer"` to `config.json`
+  - `"state_notifications"` to `config.json`. [Read about it here](./README.md#configuration-file).
 - Added `config file` values check and update if new were added
 - Added simple unit test for script version match
 - Enhanced already imported modules usage
