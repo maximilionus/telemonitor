@@ -26,6 +26,7 @@ DEF_CFG = {
 
 
 def init_logger():
+    """ Initialize python `logging` module """
     if not os.path.isdir(DIR_LOG):
         os.makedirs(DIR_LOG)
     else:
@@ -40,6 +41,11 @@ def init_logger():
 
 
 def construct_sysinfo() -> str:
+    """ Get system information and construct message from it.
+
+    Returns:
+        str: Constructed and formatted message, ready for Telegram.
+    """
     __uname = platform.uname()
     __sysname = f"{__uname[0]} {__uname[4]}"
     __uptime_raw = uptime()
@@ -67,6 +73,12 @@ def init_shared_dir() -> bool:
 
 class TM_ControlInlineKB:
     def __init__(self, bot: Bot, dispatcher: Dispatcher):
+        """ Generate telegram inline keyboard for bot.
+
+        Args:
+            bot (Bot): aiogram Bot object.
+            dispatcher (Dispatcher): aiogram Dispatcher object.
+        """
         self.inline_kb = InlineKeyboardMarkup()
 
         self.btn_get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
@@ -101,6 +113,11 @@ class TM_ControlInlineKB:
                 elif sys_platform == 'win32': subprocess.run(['shutdown', '/s', '/t', '0'])
 
     def get_keyboard(self) -> object:
+        """ Get generated inline keyboard.
+
+        Returns:
+            object: Inline keyboard.
+        """
         return self.inline_kb
 
 
@@ -108,7 +125,17 @@ class TM_Whitelist:
     __logger = logging.getLogger("TM.Whitelist")
 
     @classmethod
-    def is_whitelisted(cls, user_id: int):
+    def is_whitelisted(cls, user_id: int) -> bool:
+        """ Check is user in whitelist.
+
+        Args:
+            user_id (int): Telegram user id.
+
+        Returns:
+            bool:
+                True - User is whitelisted.
+                False - User is not whitelisted.
+        """
         users = cls.get_whitelist()
         if user_id in users:
             return True
@@ -116,25 +143,34 @@ class TM_Whitelist:
             return False
 
     @staticmethod
-    def get_whitelist():
+    def get_whitelist() -> list:
+        """ Get all whitelisted users from config file.
+
+        Returns:
+            list: All whitelisted users.
+        """
         return TM_Config.get()["whitelisted_users"]
 
     @classmethod
-    async def send_to_all(cls, bot: object, message: str):
-        """ Send message to all users in whitelist
+    async def send_to_all(cls, bot: object, message: str) -> bool:
+        """ Send message to all users in whitelist.
 
         Args:
-            bot (object): aiogram bot object
-            message (str): Text of the message
+            bot (object): aiogram bot object.
+            message (str): Text of the message.
 
         Returns:
-            None
+            bool:
+                True - Message sent.
+                False - Message not sent.
         """
         for user in cls.get_whitelist():
             try:
                 await bot.send_message(user, message, parse_mode=PARSE_MODE)
+                return True
             except Exception as e:
                 cls.__logger.error(f"Can't send message to whitelisted user [{user}]: < {e} >")
+                return False
 
 
 class TM_Config:
@@ -145,8 +181,8 @@ class TM_Config:
     def __init__(self):
         """
         Initialize configuration file.
-        If the configuration file is not found, it will be created.
-        If the configuration file is found, it will be checked for all necessary values.
+        If the configuration file is not found - it will be created.
+        If the configuration file is found - it will be checked for all necessary values.
         """
         if not self.is_exist():
             self.create()
@@ -165,17 +201,30 @@ class TM_Config:
 
     @classmethod
     def create(cls):
-        """ Create config file from built-in values """
+        """ Create config file with default values. """
         cls.write(DEF_CFG)
         cls.__logger.info("Config file was generated.")
 
     @staticmethod
     def write(config_dict: dict):
+        """ Rewrite configuration file with new values.
+
+        Args:
+            config_dict (dict): Dictionary with new config values.
+        """
         with open(PATH_CFG, 'wt') as f:
             json.dump(config_dict, f, indent=4)
 
     @classmethod
     def get(cls) -> dict:
+        """ Get json configuration file values.
+
+        If config file wasn't changed from last read - get values from variable,
+        Else - Read values from modified file.
+
+        Returns:
+            dict: Parsed configuration json file.
+        """
         if cls.is_modified():
             with open(PATH_CFG, 'rt') as f:
                 cls.__config = json.load(f)
@@ -201,4 +250,11 @@ class TM_Config:
 
     @staticmethod
     def is_exist() -> bool:
+        """ Check configuration file existence.
+
+        Returns:
+            bool:
+                True - Config file exists.
+                False - Config file doesn't exist.
+        """
         return True if os.path.isfile(PATH_CFG) else False
