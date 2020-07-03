@@ -4,6 +4,8 @@
   - [Features](#features)
   - [How to run](#how-to-run)
   - [Bot Commands](#bot-commands)
+  - [File Transfer System](#file-transfer-system)
+    - [How to use](#how-to-use)
   - [Configuration File](#configuration-file)
   - [Supported Platforms](#supported-platforms)
   - [Logging](#logging)
@@ -15,6 +17,7 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
 - Show system information (OS, Architecture, Uptime, User@Host)
 - Reboot or Shutdown the system
 - Modify whitelisted users without restart
+- [File transfer system](#file-transfer-system) *(Currently works only as `file`/`image` receiver)*
 
 ## How to run
 > Note that bot requires access to some system commands *(such as `shutdown` and `reboot`)*, so if you want all features to work as intended - run all commands from `root` *(with `sudo`)* or from user who has full access to those commands.
@@ -34,13 +37,23 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
 start - Start the bot
 ```
 
+## File Transfer System
+This feature allows you to transfer files **to** bot's host machine.
+> Note that all files will be stored on Telegram servers.  
+> Currently this system supports only `documents` and `images` transfer.
+
+### How to use
+- Simply send any `file`/`image` to bot from your client and you will receive notification when all files will be downloaded to host.
+
 ## Configuration File
 This configuration file will be generated on first start in `./Telemonitor/` directory and needs to be modified.
 
 ```jsonc
 {
     "api_key": "123:token__here", // Telegram bot api token
-    "whitelisted_users": [12345, 54321, 224414] // Array with all whitelisted users ids
+    "whitelisted_users": [12345, 54321, 224414], // Array with all whitelisted users ids
+    "state_notifications": true, // Enable/Disable notification message on boot and shutdown event
+    "enable_file_transfer": true // Enable/Disable file transfer system
 }
 ```
 
@@ -52,6 +65,7 @@ All list of features and supported platforms.
 | `System Information`    | ✓     | ✓       | ⍻     |
 | `Shutdown` & `Reboot`   | ✓     | ✓       | ⍻     |
 | `Uptime`                | ✓     | ✓       | ⍻     |
+| `File Transfer System`  | ⍻     | ✓       | ⍻     |
 
 > *Legend*  
 > `✓` - Available  

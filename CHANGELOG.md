@@ -1,8 +1,13 @@
 # Telemonitor Changelog
 
 [**Unreleased**](https://github.com/maximilionus/Telemonitor)
-- Enhanced already imported modules usage
+- Implemented file transfer system. Currently works only as `file`/`image` receiver.
+- Added new `bool` value `"enable_file_tranfer"` to `config.json`
+- Added new `bool` value `"state_notifications"` to `config.json`. [Read moar here](./README.md#configuration-file).
+- Added `config file` values check and update if new were added
 - Added simple unit test for script version match
+- Enhanced already imported modules usage
+- Logging level changed to `INFO`
 
 [**0.2.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.2.5)
 - Added automatic logs cleanup after exceeding the log files limit. Look for const `MAX_LOGS` in [`helpers.py`](./Telemonitor/helpers.py)

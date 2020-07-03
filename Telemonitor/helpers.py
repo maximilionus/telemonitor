@@ -15,10 +15,13 @@ from aiogram.utils.markdown import code, bold, italic
 MAX_LOGS = 30
 DIR_LOG = "./Logs"
 PATH_CFG = "./config.json"
+PATH_SHARED_DIR = "./Shared"
 PARSE_MODE = ParseMode.MARKDOWN_V2
 DEF_CFG = {
     "api_key": "",
-    "whitelisted_users": []
+    "whitelisted_users": [],
+    "state_notifications": True,
+    "enable_file_transfer": True
 }
 
 
@@ -33,7 +36,7 @@ def init_logger():
             for log_file in log_files:
                 os.remove(os.path.join(DIR_LOG, log_file))
     filename = f'{DIR_LOG}/TMLog_{strftime("%Y-%m-%d_%H-%M-%S")}.log'
-    logging.basicConfig(filename=filename, format="[%(asctime)s][%(name)s][%(levelname)s]: %(message)s")
+    logging.basicConfig(filename=filename, format="[%(asctime)s][%(name)s][%(levelname)s]: %(message)s", level=logging.INFO)
 
 
 def construct_sysinfo() -> str:
@@ -45,6 +48,21 @@ def construct_sysinfo() -> str:
 
     string_final = f"{bold('System')}: {code(__sysname)}\n{bold('Uptime')} {italic('dd:hh:mm:ss')}: {code(__uptime)}\n{bold('User@Host')}: {code(__userhost)}"
     return string_final
+
+
+def init_shared_dir() -> bool:
+    """ Initialize dir for shared files
+
+    Returns:
+        bool:
+            True - Dir doesn't exist and was created.
+            False - Dir already exists.
+    """
+    if not os.path.exists(PATH_SHARED_DIR):
+        os.makedirs(PATH_SHARED_DIR)
+        return True
+    else:
+        return False
 
 
 class TM_ControlInlineKB:
@@ -125,16 +143,36 @@ class TM_Config:
     __logger = logging.getLogger("TM.Config")
 
     def __init__(self):
+        """
+        Initialize configuration file.
+        If the configuration file is not found, it will be created.
+        If the configuration file is found, it will be checked for all necessary values.
+        """
         if not self.is_exist():
             self.create()
-            print(f"Config file was generated in < {PATH_CFG} >.\nFirst, you need to configure its values and then run the script again.")
+            print(f"Config file was generated in < {PATH_CFG} >.\nFirst, you need to configure it's values and then run the script again.")
             exit()
+        else:
+            cfg = self.get()
+            up_to_date = True
+            for def_key in DEF_CFG:
+                if def_key not in cfg:
+                    if up_to_date: up_to_date = False
+                    cfg.update({def_key: DEF_CFG[def_key]})
+                if not up_to_date: self.write(cfg)
+
+            self.__logger.info("Config file exists and up-to-date" if up_to_date else "Existing config file was updated with new keys")
 
     @classmethod
     def create(cls):
-        with open(PATH_CFG, 'wt') as f:
-            json.dump(DEF_CFG, f, indent=4)
+        """ Create config file from built-in values """
+        cls.write(DEF_CFG)
         cls.__logger.info("Config file was generated.")
+
+    @staticmethod
+    def write(config_dict: dict):
+        with open(PATH_CFG, 'wt') as f:
+            json.dump(config_dict, f, indent=4)
 
     @classmethod
     def get(cls) -> dict:

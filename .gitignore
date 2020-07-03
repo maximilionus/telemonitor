@@ -8,8 +8,9 @@ __pycache__
 # Logs
 Logs
 
-# Config
+# Telemonitor
 Telemonitor/config.json
+Telemonitor/Shared
 
 # VS Code config
 .vscode
