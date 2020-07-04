@@ -191,13 +191,29 @@ class TM_Config:
         else:
             cfg = self.get()
             up_to_date = True
+            has_deprecated_values = False
+
+            # Add not existing values
             for def_key in DEF_CFG:
                 if def_key not in cfg:
-                    if up_to_date: up_to_date = False
+                    up_to_date = False
                     cfg.update({def_key: DEF_CFG[def_key]})
-                if not up_to_date: self.write(cfg)
 
-            self.__logger.info("Config file exists and up-to-date" if up_to_date else "Existing config file was updated with new keys")
+            # Delete deprecated values
+            for key in tuple(cfg):
+                if key not in DEF_CFG:
+                    has_deprecated_values = True
+                    del(cfg[key])
+
+            if not up_to_date or has_deprecated_values: self.write(cfg)
+
+            log_message = "Config file "
+            if up_to_date: log_message += "is up-to-date"
+            else: log_message += "was updated with new keys"
+
+            if has_deprecated_values: log_message += " and deprecated keys were removed"
+
+            self.__logger.info(log_message)
 
     @classmethod
     def create(cls):

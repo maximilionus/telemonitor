@@ -5,7 +5,9 @@
 - Added new params to `config.json`:
   - `"enable_file_tranfer"` to `config.json`
   - `"state_notifications"` to `config.json`. [Read about it here](./README.md#configuration-file).
-- Added `config file` values check and update if new were added
+- Added `config file` values scan on bot startup.
+  - Add new values
+  - Delete deprecated
 - Added simple unit test for script version match
 - Enhanced already imported modules usage
 - Logging level changed to `INFO`

@@ -41,7 +41,7 @@ def run():
                 if message.content_type == 'document':
                     await message.document.download(path.join(h.PATH_SHARED_DIR, message.document.file_name))
                     logger.info(f"Successfully downloaded file {message.document.file_name} to {path.abspath(h.PATH_SHARED_DIR)}")
-                    await message.reply(text=f"Successfully downloaded file {message.document.file_name}", reply=False)
+                    await message.reply(text=f"Successfully downloaded file {code(message.document.file_name)}", reply=False)
                 elif message.content_type == 'photo':
                     await message.photo[-1].download(h.PATH_SHARED_DIR)
                     logger.info(f"Successfully downloaded image(-s) to {path.join(path.abspath(h.PATH_SHARED_DIR), 'photos')}")
