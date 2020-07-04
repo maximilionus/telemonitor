@@ -66,7 +66,7 @@ All list of features and supported platforms.
 | `System Information`    | ✓     | ✓       | ⍻     |
 | `Shutdown` & `Reboot`   | ✓     | ✓       | ⍻     |
 | `Uptime`                | ✓     | ✓       | ⍻     |
-| `File Transfer System`  | ⍻     | ✓       | ⍻     |
+| `File Transfer System`  | ✓     | ✓       | ⍻     |
 
 > *Legend*  
 > `✓` - Available  
