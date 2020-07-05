@@ -4,9 +4,10 @@
   - [Features](#features)
   - [How to run](#how-to-run)
   - [Bot Commands](#bot-commands)
-  - [File Transfer System](#file-transfer-system)
+  - [File Transfer System *(FTS)*](#file-transfer-system-fts)
     - [How to use](#how-to-use)
   - [Configuration File](#configuration-file)
+    - [Default `config.json`](#default-configjson)
   - [Supported Platforms](#supported-platforms)
   - [Logging](#logging)
 
@@ -37,8 +38,9 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
 start - Start the bot
 ```
 
-## File Transfer System
-This feature allows you to transfer files between bot's host machine and telegram user.
+## File Transfer System *(FTS)*
+This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./Telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
+
 > Note that **all transfered files will be stored on Telegram servers!**
 
 > Currently this system supports only `documents` and `images` transfer **only from** *whitelisted telegram user* to *bot's host machine*
@@ -49,6 +51,9 @@ This feature allows you to transfer files between bot's host machine and telegra
 ## Configuration File
 This configuration file will be generated on first start in `./Telemonitor/` directory and needs to be modified.
 
+Configuration file will be automatically checked on each bot start to remove deprecated and add new *keys*. All actions with config file will be listed in [log file](#logging).
+
+### Default `config.json`
 ```jsonc
 {
     "api_key": "123:token__here", // Telegram bot api token

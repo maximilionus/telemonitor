@@ -11,6 +11,8 @@ from aiogram import types, Dispatcher, Bot
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from aiogram.utils.markdown import code, bold, italic
 
+from Telemonitor import __version__
+
 
 MAX_LOGS = 30
 DIR_LOG = "./Logs"
@@ -37,7 +39,7 @@ def init_logger():
             for log_file in log_files:
                 os.remove(os.path.join(DIR_LOG, log_file))
     filename = f'{DIR_LOG}/TMLog_{strftime("%Y-%m-%d_%H-%M-%S")}.log'
-    logging.basicConfig(filename=filename, format="[%(asctime)s][%(name)s][%(levelname)s]: %(message)s", level=logging.INFO)
+    logging.basicConfig(filename=filename, format=f"[%(asctime)s][%(name)s:{__version__}][%(levelname)s]: %(message)s", level=logging.INFO)
 
 
 def construct_sysinfo() -> str:
@@ -187,6 +189,7 @@ class TM_Config:
         if not self.is_exist():
             self.create()
             print(f"Config file was generated in < {PATH_CFG} >.\nFirst, you need to configure it's values and then run the script again.")
+            self.__logger.info("First start detected")
             exit()
         else:
             cfg = self.get()
