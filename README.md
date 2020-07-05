@@ -2,13 +2,15 @@
 - [Telemonitor](#telemonitor)
   - [Main Information](#main-information)
   - [Features](#features)
+    - [Stable](#stable)
+    - [Development](#development)
   - [How to run](#how-to-run)
   - [Bot Commands](#bot-commands)
-  - [Optional arguments](#optional-arguments)
+  - [Optional Arguments](#optional-arguments)
   - [File Transfer System *(FTS)*](#file-transfer-system-fts)
     - [How to use](#how-to-use)
   - [Configuration File](#configuration-file)
-    - [Default `config.json`](#default-configjson)
+    - [Default Config](#default-config)
   - [Supported Platforms](#supported-platforms)
   - [Logging](#logging)
 
@@ -18,10 +20,18 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
 
 
 ## Features
+### Stable
+
 - Show system information (OS, Architecture, Uptime, User@Host)
 - Reboot or Shutdown the system
-- Modify whitelisted users without restart
+- Notification message to all *whitelisted users* on bot startup
 - [File transfer system](#file-transfer-system) *(Currently works only as `file`/`image` receiver)*
+- Modify whitelisted users without restart
+
+### Development
+Development features are in progress of development and *are unstable*, so they're disabled by default. Enable with [argument `--dev`](#optional-arguments). Use at your own risk and be ready to drown in errors.
+
+- Send notification message to all whitelisted users on shutdown
 
 
 ## How to run
@@ -35,7 +45,7 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
    ```bash
    poetry run telem
    ```
-4. On the first start `Telemonitor` will generate `config.json` *([about Config](#configuration-file))* and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
+4. On the first start `Telemonitor` will generate `config.json` *([about config](#configuration-file))* and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
 
 
 ## Bot Commands
@@ -44,11 +54,12 @@ start - Start the bot
 ```
 
 
-## Optional arguments
+## Optional Arguments
 | Arg            | Description                                 |
 | :------------- | :------------------------------------------ |
 | `-h`, `--help` | Show help message and exit                  |
 | `--verbose`    | Write more detailed information to log file |
+| `--dev`        | Enable unstable development features        |
 
 
 ## File Transfer System *(FTS)*
@@ -67,7 +78,7 @@ This configuration file will be generated on first start in `./Telemonitor/` dir
 
 Configuration file will be automatically checked on each bot start to remove deprecated and add new *keys*. All actions with config file will be listed in [log file](#logging).
 
-### Default `config.json`
+### Default Config
 ```jsonc
 {
     "api_key": "123:token__here", // Telegram bot api token

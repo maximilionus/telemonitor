@@ -10,7 +10,8 @@
   - Delete deprecated
 - Added simple unit test for script version match
 - Added arguments handling (with `argparse` module)
-  - Added arg `--verbose` to write more detailed information to log file.
+  - Added arg `--verbose` : Write more detailed information to log file
+  - Added arg `--dev` : Enable unstable development features
 - Added bot version to logging
 - Logging level changed to `INFO`
 - Enhanced already imported modules usage
