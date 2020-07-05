@@ -19,6 +19,10 @@ DIR_LOG = "./Logs"
 PATH_CFG = "./config.json"
 PATH_SHARED_DIR = "./Shared"
 PARSE_MODE = ParseMode.MARKDOWN_V2
+STRS = {
+    "name": "Telemonitor",
+    "description": "Telegram bot for monitoring your system."
+}
 DEF_CFG = {
     "api_key": "",
     "whitelisted_users": [],
@@ -27,8 +31,12 @@ DEF_CFG = {
 }
 
 
-def init_logger():
-    """ Initialize python `logging` module """
+def init_logger(is_verbose: bool = False):
+    """ Initialize python `logging` module
+
+    Args:
+        is_verbose (bool, optional): Write more detailed information to log file. Defaults to False.
+    """
     if not os.path.isdir(DIR_LOG):
         os.makedirs(DIR_LOG)
     else:
@@ -38,8 +46,10 @@ def init_logger():
             print(f"Clearing logs folder. {log_files_len} files will be removed")
             for log_file in log_files:
                 os.remove(os.path.join(DIR_LOG, log_file))
+
+    log_level = logging.DEBUG if is_verbose else logging.INFO
     filename = f'{DIR_LOG}/TMLog_{strftime("%Y-%m-%d_%H-%M-%S")}.log'
-    logging.basicConfig(filename=filename, format=f"[%(asctime)s][%(name)s:{__version__}][%(levelname)s]: %(message)s", level=logging.INFO)
+    logging.basicConfig(filename=filename, format=f"[%(asctime)s][{STRS['name']}:{__version__}][%(name)s][%(levelname)s]: %(message)s", level=log_level)
 
 
 def construct_sysinfo() -> str:

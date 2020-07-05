@@ -4,6 +4,7 @@
   - [Features](#features)
   - [How to run](#how-to-run)
   - [Bot Commands](#bot-commands)
+  - [Optional arguments](#optional-arguments)
   - [File Transfer System *(FTS)*](#file-transfer-system-fts)
     - [How to use](#how-to-use)
   - [Configuration File](#configuration-file)
@@ -11,14 +12,17 @@
   - [Supported Platforms](#supported-platforms)
   - [Logging](#logging)
 
+
 ## Main Information
 Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiogram) for system monitoring. Bot is currently in progress of development, so new features will probably be `added`/`changed`/`deprecated`.
+
 
 ## Features
 - Show system information (OS, Architecture, Uptime, User@Host)
 - Reboot or Shutdown the system
 - Modify whitelisted users without restart
 - [File transfer system](#file-transfer-system) *(Currently works only as `file`/`image` receiver)*
+
 
 ## How to run
 > Note that bot requires access to some system commands *(such as `shutdown` and `reboot`)*, so if you want all features to work as intended - run all commands from `root` *(with `sudo`)* or from user who has full access to those commands.
@@ -33,10 +37,19 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
    ```
 4. On the first start `Telemonitor` will generate `config.json` *([about Config](#configuration-file))* and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
 
+
 ## Bot Commands
 ```
 start - Start the bot
 ```
+
+
+## Optional arguments
+| Arg            | Description                                 |
+| :------------- | :------------------------------------------ |
+| `-h`, `--help` | Show help message and exit                  |
+| `--verbose`    | Write more detailed information to log file |
+
 
 ## File Transfer System *(FTS)*
 This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./Telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
@@ -47,6 +60,7 @@ This feature allows you to transfer files between bot's host machine and telegra
 
 ### How to use
 - Simply send any `file`/`image` to bot from your client and you will receive notification when all files will be downloaded to host.
+
 
 ## Configuration File
 This configuration file will be generated on first start in `./Telemonitor/` directory and needs to be modified.
@@ -63,6 +77,7 @@ Configuration file will be automatically checked on each bot start to remove dep
 }
 ```
 
+
 ## Supported Platforms
 All list of features and supported platforms.
 
@@ -77,6 +92,7 @@ All list of features and supported platforms.
 > `✓` - Available  
 > `⍻` - Available but not tested  
 > `✗` - Not available
+
 
 ## Logging
 **Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`

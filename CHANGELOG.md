@@ -9,9 +9,11 @@
   - Add new values
   - Delete deprecated
 - Added simple unit test for script version match
-- Enhanced already imported modules usage
-- Logging level changed to `INFO`
+- Added arguments handling (with `argparse` module)
+  - Added arg `--verbose` to write more detailed information to log file.
 - Added bot version to logging
+- Logging level changed to `INFO`
+- Enhanced already imported modules usage
 
 [**0.2.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.2.5)
 - Added automatic logs cleanup after exceeding the log files limit. Look for const `MAX_LOGS` in [`helpers.py`](./Telemonitor/helpers.py)

@@ -1,16 +1,24 @@
 from os import chdir, path
+import argparse
 import logging
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import bold, code
 
 from Telemonitor import helpers as h, __version__
-from Telemonitor.helpers import TM_Config, TM_Whitelist, TM_ControlInlineKB
+from Telemonitor.helpers import TM_Config, TM_Whitelist, TM_ControlInlineKB, STRS
 
 
 def run():
+    argparser = argparse.ArgumentParser(
+        prog=STRS["name"],
+        description=STRS["description"]
+    )
+    argparser.add_argument('--verbose', help="Write more detailed information to log file", action="store_true")
+    args = argparser.parse_args()
+
     chdir(path.dirname(__file__))
-    h.init_logger()
+    h.init_logger(args.verbose)
     logger = logging.getLogger('TM.Main')
     logger.info("Bot is starting")
 
@@ -27,7 +35,7 @@ def run():
     async def __command_start(message: types.Message):
         if TM_Whitelist.is_whitelisted(message.from_user.id):
             await message.reply(
-                bold("Welcome to the Telemonitor control panel"),
+                bold(f"Welcome to the {STRS['name']} control panel"),
                 reply=False,
                 parse_mode=h.PARSE_MODE,
                 reply_markup=ikb.get_keyboard()
