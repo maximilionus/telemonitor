@@ -91,14 +91,14 @@ class TM_ControlInlineKB:
             bot (Bot): aiogram Bot object.
             dispatcher (Dispatcher): aiogram Dispatcher object.
         """
-        self.inline_kb = InlineKeyboardMarkup()
+        self.__inline_kb = InlineKeyboardMarkup()
 
-        self.btn_get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
-        self.btn_reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
-        self.btn_shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
+        self.__btn_get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
+        self.__btn_reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
+        self.__btn_shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
 
-        self.inline_kb.add(self.btn_get_sysinfo)
-        self.inline_kb.row(self.btn_reboot, self.btn_shutdown)
+        self.__inline_kb.add(self.btn_get_sysinfo)
+        self.__inline_kb.row(self.btn_reboot, self.btn_shutdown)
 
         @dispatcher.callback_query_handler()
         async def __callback_sysinfo_press(callback_query: types.CallbackQuery):
@@ -124,7 +124,8 @@ class TM_ControlInlineKB:
                 elif sys_platform == 'darwin': subprocess.run(['shutdown', '-h', 'now'])
                 elif sys_platform == 'win32': subprocess.run(['shutdown', '/s', '/t', '0'])
 
-    def get_keyboard(self) -> object:
+    @property
+    def keyboard(self) -> object:
         """ Get generated inline keyboard.
 
         Returns:

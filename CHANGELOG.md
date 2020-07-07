@@ -1,10 +1,16 @@
 # Telemonitor Changelog
+- [Telemonitor Changelog](#telemonitor-changelog)
+  - [Versions](#versions)
+  - [Colors](#colors)
 
-[**Unreleased**](https://github.com/maximilionus/Telemonitor)
+## Versions
+
+[**1.0.0**-dev](https://github.com/maximilionus/Telemonitor/tree/development)
+> Configuration file from previous versions **will work** with this major update. There's no need to reset them.
 - Implemented file transfer system. Currently works only as `file`/`image` receiver.
-- Added new params to `config.json`:
-  - `"enable_file_tranfer"` to `config.json`
-  - `"state_notifications"` to `config.json`. [Read about it here](./README.md#configuration-file).
+- Added new params to `config.json` ([Read about their meaning here](./README.md#configuration-file)):
+  - `"enable_file_tranfer"`
+  - `"state_notifications"`
 - Added `config file` values scan on bot startup.
   - Add new values
   - Delete deprecated
@@ -13,7 +19,8 @@
   - Added arg `--verbose` : Write more detailed information to log file
   - Added arg `--dev` : Enable unstable development features
 - Added bot version to logging
-- Logging level changed to `INFO`
+- <a style="color: red">Changed</a> [`TM_ControlInlineKB`](./Telemonitor/helpers.py) class method `get_keyboard()` to *@property* `keyboard` and made all class variables *private*
+- Default logging level changed to `INFO`
 - Enhanced already imported modules usage
 
 [**0.2.5**](https://github.com/maximilionus/Telemonitor/releases/tag/v0.2.5)
@@ -52,3 +59,8 @@
 - Bot functionality done
 - Added whitelist
 - Added configuration file r/w
+
+## Colors
+| Color                         | Meaning                                            |
+| :---------------------------- | :------------------------------------------------- |
+| <a style="color: red">RED</a> | Major changes, incompatible with previous versions |
