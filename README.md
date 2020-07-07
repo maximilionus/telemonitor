@@ -107,4 +107,4 @@ All list of features and supported platforms.
 
 
 ## Logging
-**Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`. Log folder will also be automaticly cleaned after exceeding log files limit *(30 files)* inside of it.
+**Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`. Log folder will also be automatically cleaned after exceeding log files limit *(30 files)* inside of it. This limit can be changed in [configuration file](#configuration-file).
