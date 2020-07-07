@@ -1,9 +1,4 @@
 # Telemonitor Changelog
-- [Telemonitor Changelog](#telemonitor-changelog)
-  - [Versions](#versions)
-  - [Colors](#colors)
-
-## Versions
 
 [**1.0.0**-dev](https://github.com/maximilionus/Telemonitor/tree/development)
 > Configuration file from previous versions **will work** with this major update. There's no need to reset them.
@@ -19,7 +14,7 @@
   - Added arg `--verbose` : Write more detailed information to log file
   - Added arg `--dev` : Enable unstable development features
 - Added bot version to logging
-- <a style="color: red">Changed</a> [`TM_ControlInlineKB`](./Telemonitor/helpers.py) class method `get_keyboard()` to *@property* `keyboard` and made all class variables *private*
+- Changed [`TM_ControlInlineKB`](./Telemonitor/helpers.py) class method `get_keyboard()` to *@property* `keyboard` and made all class variables *private*
 - Default logging level changed to `INFO`
 - Enhanced already imported modules usage
 
@@ -59,8 +54,3 @@
 - Bot functionality done
 - Added whitelist
 - Added configuration file r/w
-
-## Colors
-| Color                         | Meaning                                            |
-| :---------------------------- | :------------------------------------------------- |
-| <a style="color: red">RED</a> | Major changes, incompatible with previous versions |
