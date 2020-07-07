@@ -1,19 +1,21 @@
 # Telemonitor Changelog
 
 [**1.0.0**-dev](https://github.com/maximilionus/Telemonitor/tree/development)
-> Configuration file from previous versions **will work** with this major update. There's no need to reset them.
+> Configuration file from previous versions **will work** with this major update. There's no need to remove it.
 - Implemented file transfer system. Currently works only as `file`/`image` receiver.
-- Added new params to `config.json` ([Read about their meaning here](./README.md#configuration-file)):
-  - `"enable_file_transfer"`
-  - `"state_notifications"`
 - Added `config file` values scan on bot startup.
   - Add new values
-  - Delete deprecated
+  - Remove deprecated
+- Maximum log files number now can be configured
 - Added simple unit test for script version match
 - Added arguments handling (with `argparse` module)
   - Added arg `--verbose` : Write more detailed information to log file
   - Added arg `--dev` : Enable unstable development features
 - Added bot version to logging
+- Added new params to `config.json` ([Read about their meaning here](./README.md#configuration-file "Readme file link")):
+  - `"log_files_max"`
+  - `"state_notifications"`
+  - `"enable_file_transfer"`
 - Changed [`TM_ControlInlineKB`](./Telemonitor/helpers.py) class method `get_keyboard()` to *@property* `keyboard` and made all class variables *private*
 - Default logging level changed to `INFO`
 - Enhanced already imported modules usage

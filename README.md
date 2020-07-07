@@ -76,13 +76,14 @@ This feature allows you to transfer files between bot's host machine and telegra
 ## Configuration File
 This configuration file will be generated on first start in `./Telemonitor/` directory and needs to be modified.
 
-Configuration file will be automatically checked on each bot start to remove deprecated and add new *keys*. All actions with config file will be listed in [log file](#logging).
+Configuration file will be automatically checked on each bot start to remove deprecated and add new *keys*, so there's *no need* to remove it on each update. All actions with config file will be listed in [log file](#logging).
 
 ### Default Config
 ```jsonc
 {
     "api_key": "123:token__here", // Telegram bot api token
     "whitelisted_users": [12345, 54321, 224414], // Array with all whitelisted users ids
+    "log_files_max": 30, // Maximum amount of .log files in logs directory
     "state_notifications": true, // Enable/Disable notification message on boot and shutdown event
     "enable_file_transfer": true // Enable/Disable file transfer system
 }
@@ -106,4 +107,4 @@ All list of features and supported platforms.
 
 
 ## Logging
-**Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`
+**Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`. Log folder will also be automaticly cleaned after exceeding log files limit *(30 files)* inside of it.

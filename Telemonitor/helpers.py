@@ -26,6 +26,7 @@ STRS = {
 DEF_CFG = {
     "api_key": "",
     "whitelisted_users": [],
+    "log_files_max": MAX_LOGS,
     "state_notifications": True,
     "enable_file_transfer": True
 }
@@ -42,7 +43,7 @@ def init_logger(is_verbose: bool = False):
     else:
         log_files = [f for f in os.listdir(DIR_LOG) if os.path.isfile(os.path.join(DIR_LOG, f))]
         log_files_len = len(log_files)
-        if log_files_len > MAX_LOGS:
+        if log_files_len > (TM_Config.get().get("log_files_max", MAX_LOGS) if TM_Config.is_exist() else MAX_LOGS):
             print(f"Clearing logs folder. {log_files_len} files will be removed")
             for log_file in log_files:
                 os.remove(os.path.join(DIR_LOG, log_file))
@@ -97,8 +98,8 @@ class TM_ControlInlineKB:
         self.__btn_reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
         self.__btn_shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
 
-        self.__inline_kb.add(self.btn_get_sysinfo)
-        self.__inline_kb.row(self.btn_reboot, self.btn_shutdown)
+        self.__inline_kb.add(self.__btn_get_sysinfo)
+        self.__inline_kb.row(self.__btn_reboot, self.__btn_shutdown)
 
         @dispatcher.callback_query_handler()
         async def __callback_sysinfo_press(callback_query: types.CallbackQuery):
@@ -131,7 +132,7 @@ class TM_ControlInlineKB:
         Returns:
             object: Inline keyboard.
         """
-        return self.inline_kb
+        return self.__inline_kb
 
 
 class TM_Whitelist:

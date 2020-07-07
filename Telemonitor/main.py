@@ -39,7 +39,7 @@ def run():
                 bold(f"Welcome to the {STRS['name']} control panel"),
                 reply=False,
                 parse_mode=PARSE_MODE,
-                reply_markup=ikb.get_keyboard()
+                reply_markup=ikb.keyboard
             )
 
     if cfg["enable_file_transfer"]:
