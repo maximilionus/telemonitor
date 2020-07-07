@@ -4,7 +4,7 @@
 > Configuration file from previous versions **will work** with this major update. There's no need to reset them.
 - Implemented file transfer system. Currently works only as `file`/`image` receiver.
 - Added new params to `config.json` ([Read about their meaning here](./README.md#configuration-file)):
-  - `"enable_file_tranfer"`
+  - `"enable_file_transfer"`
   - `"state_notifications"`
 - Added `config file` values scan on bot startup.
   - Add new values
