@@ -20,4 +20,4 @@ def get_toml_version() -> str:
 def test_init_version():
     toml_version = get_toml_version()
 
-    assert __version__ == toml_version
+    assert __version__ == toml_version, "Version is not up-to-date"

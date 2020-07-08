@@ -11,8 +11,8 @@ from Telemonitor.helpers import TM_Whitelist, TM_ControlInlineKB, PARSE_MODE, ST
 
 def run():
     argparser = argparse.ArgumentParser(
-        prog=STRS["name"],
-        description=STRS["description"]
+        prog=STRS.name,
+        description=STRS.description
     )
     argparser.add_argument('--verbose', help="Write more detailed information to log file", action="store_true")
     argparser.add_argument('--dev', help="Enable unstable development features", action="store_true", dest="dev_features")
@@ -36,7 +36,7 @@ def run():
     async def __command_start(message: types.Message):
         if TM_Whitelist.is_whitelisted(message.from_user.id):
             await message.reply(
-                bold(f"Welcome to the {STRS['name']} control panel"),
+                bold(f"Welcome to the {STRS.name} control panel"),
                 reply=False,
                 parse_mode=PARSE_MODE,
                 reply_markup=ikb.keyboard

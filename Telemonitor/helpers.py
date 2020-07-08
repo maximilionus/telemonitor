@@ -19,10 +19,6 @@ DIR_LOG = "./Logs"
 PATH_CFG = "./config.json"
 PATH_SHARED_DIR = "./Shared"
 PARSE_MODE = ParseMode.MARKDOWN_V2
-STRS = {
-    "name": "Telemonitor",
-    "description": "Telegram bot for monitoring your system."
-}
 DEF_CFG = {
     "api_key": "",
     "whitelisted_users": [],
@@ -30,6 +26,13 @@ DEF_CFG = {
     "state_notifications": True,
     "enable_file_transfer": True
 }
+
+
+class STRS:
+    name = "Telemonitor"
+    description = "Telegram bot for monitoring your system."
+    reboot = "Rebooting the system"
+    shutdown = "Shutting down the system"
 
 
 def init_logger(is_verbose: bool = False):
@@ -50,7 +53,7 @@ def init_logger(is_verbose: bool = False):
 
     log_level = logging.DEBUG if is_verbose else logging.INFO
     filename = f'{DIR_LOG}/TMLog_{strftime("%Y-%m-%d_%H-%M-%S")}.log'
-    logging.basicConfig(filename=filename, format=f"[%(asctime)s][{STRS['name']}:{__version__}][%(name)s][%(levelname)s]: %(message)s", level=log_level)
+    logging.basicConfig(filename=filename, format=f"[%(asctime)s][{STRS.name}:{__version__}][%(name)s][%(levelname)s]: %(message)s", level=log_level)
 
 
 def construct_sysinfo() -> str:
@@ -102,7 +105,7 @@ class TM_ControlInlineKB:
         self.__inline_kb.row(self.__btn_reboot, self.__btn_shutdown)
 
         @dispatcher.callback_query_handler()
-        async def __callback_sysinfo_press(callback_query: types.CallbackQuery):
+        async def __callback_ctrl_press(callback_query: types.CallbackQuery):
             if not TM_Whitelist.is_whitelisted(callback_query.from_user.id): return False
 
             data = callback_query.data
@@ -112,14 +115,14 @@ class TM_ControlInlineKB:
                 await bot.send_message(callback_query.from_user.id, message, parse_mode=PARSE_MODE)
 
             elif data == 'button-reboot-press':
-                await bot.answer_callback_query(callback_query.id, 'Rebooting the system...')
+                await bot.answer_callback_query(callback_query.id, STRS.reboot, show_alert=True)
 
                 if sys_platform == 'linux': subprocess.run(['shutdown', '-r', 'now'])
                 elif sys_platform == 'darwin': subprocess.run(['shutdown', '-r', 'now'])
                 elif sys_platform == 'win32': subprocess.run(['shutdown', '/r', '/t', '0'])
 
             elif data == 'button-shutdown-press':
-                await bot.answer_callback_query(callback_query.id, "Shutting down the system...")
+                await bot.answer_callback_query(callback_query.id, STRS.shutdown, show_alert=True)
 
                 if sys_platform == 'linux': subprocess.run(['shutdown', 'now'])
                 elif sys_platform == 'darwin': subprocess.run(['shutdown', '-h', 'now'])
