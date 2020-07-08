@@ -4,6 +4,7 @@
 > Configuration file from previous versions **will work** with this major update. There's no need to remove it.
 - Implemented file transfer system. Currently works only as `file`/`image` receiver.
 - Reply with *alert* message to `Shutdown` and `Reboot` buttons press
+- Added information about system version to *Sys Info* button reply
 - Added `config file` values scan on bot startup
   - Add new values
   - Remove deprecated

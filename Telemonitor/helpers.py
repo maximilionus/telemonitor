@@ -65,10 +65,10 @@ def construct_sysinfo() -> str:
         str: Constructed and formatted message, ready for Telegram.
     """
     __uname = platform.uname()
-    __sysname = f"{__uname[0]} {__uname[4]}"
+    __sysname = f"{__uname.system} {__uname.release} ({__uname.version})"
     __uptime_raw = uptime()
     __uptime = f"{int(__uptime_raw / (24 * 3600))}:{int(__uptime_raw / 3600)}:{int(__uptime_raw / 60 % 60)}:{int(__uptime_raw % 60)}"
-    __userhost = f"{os.path.basename(os.path.expanduser('~'))}@{__uname[1]}"
+    __userhost = f"{os.path.basename(os.path.expanduser('~'))}@{__uname.node}"
 
     string_final = f"{bold('System')}: {code(__sysname)}\n{bold('Uptime')} {italic('dd:hh:mm:ss')}: {code(__uptime)}\n{bold('User@Host')}: {code(__userhost)}"
     return string_final
