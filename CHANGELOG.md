@@ -2,9 +2,11 @@
 
 [**1.0.0**-dev](https://github.com/maximilionus/Telemonitor/tree/development)
 > Configuration file from previous versions **will work** with this major update. There's no need to remove it.
-- Implemented file transfer system. Currently works only as `file`/`image` receiver.
+- Implemented [file transfer system](./README.md#file-transfer-system-fts). Currently works only as `file`/`image` receiver.
 - Reply with *alert* message to `Shutdown` and `Reboot` buttons press
-- Added information about system version to *Sys Info* button reply
+- Start menu:
+  - Added information about system version to *Sys Info* button reply
+  - Enhanced *uptime* output. Was: `0:21:2:34`, Now: `00:21:02:32`
 - Added `config file` values scan on bot startup
   - Add new values
   - Remove deprecated

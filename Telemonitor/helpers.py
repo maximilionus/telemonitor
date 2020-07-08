@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import platform
+from math import floor
 from sys import platform as sys_platform
 from time import strftime
 import subprocess
@@ -66,9 +67,17 @@ def construct_sysinfo() -> str:
     """
     __uname = platform.uname()
     __sysname = f"{__uname.system} {__uname.release} ({__uname.version})"
-    __uptime_raw = uptime()
-    __uptime = f"{int(__uptime_raw / (24 * 3600))}:{int(__uptime_raw / 3600)}:{int(__uptime_raw / 60 % 60)}:{int(__uptime_raw % 60)}"
     __userhost = f"{os.path.basename(os.path.expanduser('~'))}@{__uname.node}"
+
+    __uptime_raw = uptime()
+    __uptime_dict = {
+        "days": str(floor(__uptime_raw / (24 * 3600))),
+        "hours": str(floor(__uptime_raw / 3600)),
+        "mins": str(floor(__uptime_raw / 60 % 60)),
+        "secs": str(floor(__uptime_raw % 60))
+    }
+    __uptime_dict.update({k: f"0{__uptime_dict[k]}" for k in __uptime_dict if len(__uptime_dict[k]) == 1})
+    __uptime = f"{__uptime_dict['days']}:{__uptime_dict['hours']}:{__uptime_dict['mins']}:{__uptime_dict['secs']}"
 
     string_final = f"{bold('System')}: {code(__sysname)}\n{bold('Uptime')} {italic('dd:hh:mm:ss')}: {code(__uptime)}\n{bold('User@Host')}: {code(__userhost)}"
     return string_final
