@@ -1,6 +1,8 @@
 # Telemonitor Changelog
 
-[**1.0.0**-dev](https://github.com/maximilionus/Telemonitor/tree/development)
+[Development](https://github.com/maximilionus/Telemonitor/tree/development)
+
+[**1.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v1.0.0)
 > Configuration file from previous versions **will work** with this major update. There's no need to remove it.
 - Implemented [file transfer system](./README.md#file-transfer-system-fts). Currently works only as `file`/`image` receiver.
 - Reply with *alert* message to `Shutdown` and `Reboot` buttons press
