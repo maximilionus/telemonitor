@@ -60,6 +60,6 @@ def run():
     executor.start_polling(
         dp,
         skip_updates=True,
-        on_startup=(lambda _: TM_Whitelist.send_to_all(bot, code("System was booted"))) if cfg["state_notifications"] else None,
-        on_shutdown=(lambda _: TM_Whitelist.send_to_all(bot, code("System is shutting down"))) if cfg["state_notifications"] and args.dev_features else None
+        on_startup=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_startup)) if cfg["state_notifications"] else None,
+        on_shutdown=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_shutdown)) if cfg["state_notifications"] and args.dev_features else None
     )

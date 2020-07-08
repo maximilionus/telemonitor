@@ -33,6 +33,8 @@ class STRS:
     description = "Telegram bot for monitoring your system."
     reboot = "Rebooting the system"
     shutdown = "Shutting down the system"
+    message_startup = code("System was booted")
+    message_shutdown = code("System is shutting down")
 
 
 def init_logger(is_verbose: bool = False):
