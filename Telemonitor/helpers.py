@@ -1,18 +1,18 @@
+import os
 import json
 import logging
-import os
 import platform
-from math import floor
-from sys import platform as sys_platform
-from time import strftime
 import subprocess
+from math import floor
+from time import strftime
+from sys import platform as sys_platform
 
 from uptime import uptime
 from aiogram import types, Dispatcher, Bot
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from aiogram.utils.markdown import code, bold, italic
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 
-from Telemonitor import __version__
+from . import __version__
 
 
 MAX_LOGS = 30
@@ -214,7 +214,7 @@ class TM_Config:
         """
         if not self.is_exist():
             self.create()
-            print(f"Config file was generated in < {PATH_CFG} >.\nFirst, you need to configure it's values and then run the script again.")
+            print(f"Config file was generated in < {os.path.abspath(PATH_CFG)} >.\nFirst, you need to configure it's values and then run the script again.")
             self.__logger.info("First start detected")
             exit()
         else:

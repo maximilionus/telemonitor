@@ -1,14 +1,11 @@
 [tool.poetry]
 name = "Telemonitor"
-version = "1.0.0"
+version = "1.0.1"
 description = ""
-authors = ["maximilionus <xxxarakxxx@gmail.com>"]
-packages = [
-    { include = "./Telemonitor" }
-]
+authors = ["maximilionus <maximilionuss@gmail.com>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.7"
 aiogram = "^2.9.2"
 uptime = "^3.0.1"
 
