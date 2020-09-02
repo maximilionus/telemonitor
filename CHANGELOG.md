@@ -3,10 +3,13 @@
 [Development](https://github.com/maximilionus/Telemonitor/tree/development)
 
 
+[**1.1.1**](https://github.com/maximilionus/Telemonitor/releases/tag/v1.1.1)
+- Fixed version of package
+
 [**1.1.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v1.1.0)
 - Added `setup.py` script for project package installation instead of force scanning with `pyproject.toml` *(This will also fix the issue with linux project installation)*
-- Changed path info of configuration file on first start from *relative* to *absolete*.
-- Changed minimal version of `python` to `>= 3.7` *(was `^3.8`)*.
+- Changed path info of configuration file on first start from *relative* to *absolete*
+- Changed minimal version of `python` to `>= 3.7` *(was `^3.8`)*
 
 [**1.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v1.0.0)
 > Configuration file from previous versions **will work** with this major update. There's no need to remove it.
