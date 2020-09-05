@@ -3,7 +3,7 @@ Test app version values in all files to match
 """
 import toml
 
-from Telemonitor import __version__
+from telemonitor import __version__
 
 
 def get_toml() -> dict:

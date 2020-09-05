@@ -1,11 +1,11 @@
 from setuptools import setup
 
-from Telemonitor import __version__
+from telemonitor import __version__
 
 
 setup(
-    name="Telemonitor",
+    name="telemonitor",
     version=__version__,
     author="maximilionus",
-    packages=["Telemonitor"]
+    packages=["telemonitor"]
 )

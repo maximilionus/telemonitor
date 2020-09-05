@@ -1,6 +1,6 @@
 [tool.poetry]
-name = "Telemonitor"
-version = "1.1.1"
+name = "telemonitor"
+version = "2.0.0"
 description = ""
 authors = ["maximilionus <maximilionuss@gmail.com>"]
 
@@ -15,7 +15,7 @@ pytest = "^5.4.3"
 toml = "^0.10.1"
 
 [tool.poetry.scripts]
-telem = "Telemonitor.main:run"
+telem = "telemonitor.main:run"
 
 [build-system]
 requires = ["poetry>=0.12"]

@@ -5,8 +5,8 @@ import logging
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import bold, code
 
-from Telemonitor import helpers as h, __version__
-from Telemonitor.helpers import TM_Whitelist, TM_ControlInlineKB, PARSE_MODE, STRS
+from . import helpers as h, __version__
+from .helpers import TM_Whitelist, TM_ControlInlineKB, PARSE_MODE, STRS
 
 
 def run():
@@ -63,3 +63,7 @@ def run():
         on_startup=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_startup)) if cfg["state_notifications"] else None,
         on_shutdown=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_shutdown)) if cfg["state_notifications"] and args.dev_features else None
     )
+
+
+if __name__ == "__main__":
+    run()
