@@ -1,12 +1,12 @@
 # Telemonitor Changelog
 
 [Development](https://github.com/maximilionus/Telemonitor/tree/development)
+
+
+[**2.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v2.0.0)
+> This major update is focused on fixing `linux`-related issues, but due to backward incompatible changes in code, this release will be marked as **major**.
 - Renamed project package name from `Telemonitor` to `telemonitor`
 - Problem with project package installation on `linux` systems was solved.
-
-
-[**2.0.0**]()
-> This major update is focused on fixing `linux`-related issues, but due to backward incompatible changes in code, this release will be marked as **major**.
 
 [**1.1.1**](https://github.com/maximilionus/Telemonitor/releases/tag/v1.1.1)
 - Fixed version of package
