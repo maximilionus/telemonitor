@@ -37,7 +37,7 @@ def __install():
             final_service_file = open(__service_config_final_path, 'wt')
 
             text = template_service_file.read()
-            text.replace('<SHELL_SCRIPT_PATH>', path.abspath(__shell_launch_script_path))
+            text = text.replace('<SHELL_SCRIPT_PATH>', path.abspath(__shell_launch_script_path))
 
             final_service_file.write(text)
         except Exception as e:
@@ -53,12 +53,13 @@ def __install():
         __logger.info("Systemd service was successfully installed on system.")
         print("Successfully installed Telemonitor systemd service to your linux system!",
               f"\nName of the service is: {path.basename(__service_config_final_path)}",
-              "\n\nNow the only thing you need to do is to run command:",
+              "\n\nNow the only thing you need to do is to run command to detect new service:",
               "\n\tsystemctl daemon-reload",
-              "\nTo refresh all services list. And now you can manually control this service with:",
-              f"\n\tsystemctl start {path.basename(__service_config_final_path)} # Start the Telemonitor service",
-              f"\n\tsystemctl stop {path.basename(__service_config_final_path)} # Stop the Telemonitor service"
-              f"\n\tsystemctl enable {path.basename(__service_config_final_path)} # Start Telemonitor service on system launch"
+              "\n\nAnd now you can manually control this service with:",
+              f"\n\tsystemctl status {path.basename(__service_config_final_path)}  # View Telemonitor logs and current status",
+              f"\n\tsystemctl start {path.basename(__service_config_final_path)}   # Start the Telemonitor service",
+              f"\n\tsystemctl stop {path.basename(__service_config_final_path)}    # Stop the Telemonitor service"
+              f"\n\tsystemctl enable {path.basename(__service_config_final_path)}  # Start Telemonitor service on system launch"
               f"\n\tsystemctl disable {path.basename(__service_config_final_path)} # Disable Telemonitor service automatic startup",
               "\n\nPlease note, that the commands above will require root user privileges to run."
               )
