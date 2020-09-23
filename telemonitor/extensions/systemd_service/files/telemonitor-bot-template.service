@@ -1,0 +1,14 @@
+[Unit]
+	Description=Telemonitor Telegram bot
+	After=network.target
+
+[Service]
+	Type=idle
+	ExecStart=<SHELL_SCRIPT_PATH>/telemonitor-start.sh
+	Environment=PYTHONUNBUFFERED=1
+
+	Restart=always
+	RestartSec=20s
+
+[Install]
+WantedBy=multi-user.target

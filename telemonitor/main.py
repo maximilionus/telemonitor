@@ -1,26 +1,19 @@
-from os import chdir, path
-import argparse
 import logging
+from os import chdir, path
 
 from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import bold, code
 
-from . import helpers as h, __version__
-from .helpers import TM_Whitelist, TM_ControlInlineKB, PARSE_MODE, STRS
+from telemonitor import helpers as h, __version__
+from telemonitor.helpers import TM_Whitelist, TM_ControlInlineKB, cli_arguments_parser, PARSE_MODE, STRS
 
 
 def run():
-    argparser = argparse.ArgumentParser(
-        prog=STRS.name,
-        description=STRS.description
-    )
-    argparser.add_argument('--verbose', help="Write more detailed information to log file", action="store_true")
-    argparser.add_argument('--dev', help="Enable unstable development features", action="store_true", dest="dev_features")
-    args = argparser.parse_args()
+    args = cli_arguments_parser()
 
     chdir(path.dirname(__file__))
     h.init_logger(args.verbose)
-    logger = logging.getLogger('TM.Main')
+    logger = logging.getLogger(__name__)
     logger.info("Bot is starting")
 
     cfg = h.TM_Config().get()
