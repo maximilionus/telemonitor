@@ -13,7 +13,7 @@ from aiogram import types, Dispatcher, Bot
 from aiogram.utils.markdown import code, bold, italic
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 
-from . import __version__
+from telemonitor import __version__
 
 
 MAX_LOGS = 30
@@ -26,7 +26,11 @@ DEF_CFG = {
     "whitelisted_users": [],
     "log_files_max": MAX_LOGS,
     "state_notifications": True,
-    "enable_file_transfer": True
+    "enable_file_transfer": True,
+    "systemd_service": {
+        "installed": False,
+        "version": -1,
+    }
 }
 
 
@@ -57,7 +61,7 @@ def init_logger(is_verbose: bool = False):
 
     log_level = logging.DEBUG if is_verbose else logging.INFO
     filename = f'{DIR_LOG}/TMLog_{strftime("%Y-%m-%d_%H-%M-%S")}.log'
-    logging.basicConfig(filename=filename, format=f"[%(asctime)s][{STRS.name}:{__version__}][%(name)s->%(funcName)s][%(levelname)s]: %(message)s", level=log_level)
+    logging.basicConfig(filename=filename, format=f"[%(asctime)s][{STRS.name}:{__version__}][%(levelname)s][%(name)s->%(funcName)s]: %(message)s", level=log_level)
 
 
 def construct_sysinfo() -> str:
@@ -111,7 +115,7 @@ def cli_arguments_parser() -> object:
     )
     argparser.add_argument('--verbose', help="Write more detailed information to log file", action="store_true")
     argparser.add_argument('--dev', help="Enable unstable development features", action="store_true", dest="dev_features")
-    argparser.add_argument('--systemd-service', '-S', action="store", choices=["install", "upgrade", "remove"], help="Linux systemd service control")
+    argparser.add_argument('--systemd-service', '-S', action="store", choices=["install", "upgrade", "remove"], dest="systemd_service", help="Linux systemd service control")
 
     return argparser.parse_args()
 

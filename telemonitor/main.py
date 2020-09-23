@@ -5,6 +5,7 @@ from aiogram import Bot, Dispatcher, executor, types
 from aiogram.utils.markdown import bold, code
 
 from telemonitor import helpers as h, __version__
+from telemonitor.extensions import systemd_service
 from telemonitor.helpers import TM_Whitelist, TM_ControlInlineKB, cli_arguments_parser, PARSE_MODE, STRS
 
 
@@ -12,11 +13,16 @@ def run():
     args = cli_arguments_parser()
 
     chdir(path.dirname(__file__))
+
     h.init_logger(args.verbose)
     logger = logging.getLogger(__name__)
-    logger.info("Bot is starting")
+    logger.info("Telemonitor is starting")
 
     cfg = h.TM_Config().get()
+
+    if hasattr(args, 'systemd_service'):
+        systemd_service.start(args.systemd_service)
+
     api_token = cfg["api_key"]
     bot = Bot(token=api_token)
     dp = Dispatcher(bot)

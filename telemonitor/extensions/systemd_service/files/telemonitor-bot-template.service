@@ -4,7 +4,7 @@
 
 [Service]
 	Type=idle
-	ExecStart=<SHELL_SCRIPT_PATH>/telemonitor-start.sh
+	ExecStart=<SHELL_SCRIPT_PATH>
 	Environment=PYTHONUNBUFFERED=1
 
 	Restart=always
