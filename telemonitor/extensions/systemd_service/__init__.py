@@ -45,10 +45,11 @@ def cli(mode: str):
 
         elif mode == 'status':
             cfg_service = TM_Config.get()['systemd_service']
+            service_exists = __systemd_config_exists()
             text = f"Telemonitor Systemd Service - Status\
-                     \n\n- Is installed: {cfg_service['installed']}"
+                     \n\n- Is installed: {service_exists}"
 
-            if cfg_service['installed']:
+            if service_exists:
                 text += f"\n- Version: {cfg_service['version']}\
                           \n- Installation path: {__service_config_final_path}"
             print(text)
@@ -165,7 +166,6 @@ def __update_cfg_values(mode: str):
 
     if mode == 'install':
         cfg['systemd_service'] = {
-            "installed": True,
             "version": __version
         }
     elif mode == 'upgrade':

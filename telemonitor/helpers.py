@@ -28,8 +28,7 @@ DEF_CFG = {
     "state_notifications": True,
     "enable_file_transfer": True,
     "systemd_service": {
-        "installed": False,
-        "version": -1,
+        "version": -1
     }
 }
 
@@ -120,8 +119,8 @@ def cli_arguments_parser() -> object:
     argparser.add_argument('--systemd-service', action='store', choices=['install', 'upgrade', 'remove', 'status'], dest='systemd_service', help='linux systemd Telemonitor service control')
 
     bot_group = argparser.add_argument_group('bot control optional arguments')
-    bot_group.add_argument('--token', action='store', type=str, dest='token_overwrite', metavar='STR', help='Force the bot to run with token from the argument instead of the configuration file')
-    bot_group.add_argument('--whitelist', action='store', type=int, dest='whitelist_overwrite', metavar='INT', nargs='+', help='Force the bot to check whitelisted users from argument instead of the of the configuration file')
+    bot_group.add_argument('--token', action='store', type=str, dest='token_overwrite', metavar='STR', help='force the bot to run with token from the argument instead of the configuration file')
+    bot_group.add_argument('--whitelist', action='store', type=int, dest='whitelist_overwrite', metavar='INT', nargs='+', help='force the bot to check whitelisted users from argument instead of the of the configuration file')
 
     dev_group = argparser.add_argument_group('advanced optional arguments')
     dev_group.add_argument('--dev', help='enable unstable development features', action='store_true', dest='dev_features')

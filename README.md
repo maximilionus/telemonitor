@@ -60,8 +60,8 @@ start - Start the bot
 | :------------------------ | :---------------------------------------------------------------------------------------------- |
 | `-h`, `--help`            | show help message and exit                                                                      |
 | `--version`               | show program's version number and exit                                                          |
-| `--token`                 | Force the bot to run with token from the argument instead of the configuration file             |
-| `--whitelist`             | Force the bot to check whitelisted users from argument instead of the of the configuration file |
+| `--token`                 | force the bot to run with token from the argument instead of the configuration file             |
+| `--whitelist`             | force the bot to check whitelisted users from argument instead of the of the configuration file |
 | `-S`, `--systemd-service` | automated systemd service installation for `linux` platforms                                    |
 | `--verbose`               | write more detailed information to log file                                                     |
 | `--dev`                   | enable unstable development features                                                            |
@@ -92,7 +92,6 @@ Configuration file will be automatically checked on each bot start to remove dep
     "state_notifications": true,                 // Enable/Disable notification message on boot and shutdown event
     "enable_file_transfer": true,                // Enable/Disable file transfer system
     "systemd_service": {                         // Dictionary for linux systemd service status
-        "installed": false,                      // Is service installed
         "version": -1                            // Version of installed service file
     }
 }
