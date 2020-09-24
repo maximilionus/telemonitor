@@ -5,7 +5,7 @@ import platform
 import argparse
 import subprocess
 from math import floor
-from time import strftime
+from time import strftime, asctime
 from sys import platform as sys_platform
 
 from uptime import uptime
@@ -61,7 +61,10 @@ def init_logger(is_verbose: bool = False):
 
     log_level = logging.DEBUG if is_verbose else logging.INFO
     filename = f'{DIR_LOG}/TMLog_{strftime("%Y-%m-%d_%H-%M-%S")}.log'
-    logging.basicConfig(filename=filename, format=f"[%(asctime)s][{STRS.name}:{__version__}][%(levelname)s][%(name)s->%(funcName)s]: %(message)s", level=log_level)
+    logging.basicConfig(filename=filename, format="[%(asctime)s][%(levelname)s][%(name)s->%(funcName)s]: %(message)s", level=log_level)
+
+    with open(filename, 'wt') as f:
+        f.write(f"{STRS.name} ({__version__}) : [ {asctime()} ]\n\n")
 
 
 def construct_sysinfo() -> str:
@@ -111,11 +114,18 @@ def cli_arguments_parser() -> object:
     """
     argparser = argparse.ArgumentParser(
         prog=STRS.name,
-        description=STRS.description
+        description=STRS.description,
     )
-    argparser.add_argument('--verbose', help="Write more detailed information to log file", action="store_true")
-    argparser.add_argument('--dev', help="Enable unstable development features", action="store_true", dest="dev_features")
-    argparser.add_argument('--systemd-service', '-S', action="store", choices=["install", "upgrade", "remove", "status"], dest="systemd_service", help="Linux systemd service control")
+    argparser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
+    argparser.add_argument('--systemd-service', action='store', choices=['install', 'upgrade', 'remove', 'status'], dest='systemd_service', help='linux systemd Telemonitor service control')
+
+    bot_group = argparser.add_argument_group('bot control optional arguments')
+    bot_group.add_argument('--token', action='store', type=str, dest='token_overwrite', metavar='STR', help='Force the bot to run with token from the argument instead of the configuration file')
+    bot_group.add_argument('--whitelist', action='store', type=int, dest='whitelist_overwrite', metavar='INT', nargs='+', help='Force the bot to check whitelisted users from argument instead of the of the configuration file')
+
+    dev_group = argparser.add_argument_group('advanced optional arguments')
+    dev_group.add_argument('--dev', help='enable unstable development features', action='store_true', dest='dev_features')
+    dev_group.add_argument('--verbose', '-v', help='write more detailed information to log file', action='store_true')
 
     return argparser.parse_args()
 
@@ -192,14 +202,17 @@ class TM_Whitelist:
         else:
             return False
 
-    @staticmethod
-    def get_whitelist() -> list:
+    @classmethod
+    def get_whitelist(cls) -> list:
         """ Get all whitelisted users from config file.
 
         Returns:
             list: All whitelisted users.
         """
-        return TM_Config.get()["whitelisted_users"]
+        from telemonitor.main import args
+        cls.__logger.debug('Whitelist read request')
+        cls.__logger.debug(args.whitelist_overwrite)
+        return TM_Config.get()["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
 
     @classmethod
     async def send_to_all(cls, bot: object, message: str) -> bool:
@@ -217,9 +230,10 @@ class TM_Whitelist:
         for user in cls.get_whitelist():
             try:
                 await bot.send_message(user, message, parse_mode=PARSE_MODE)
+                cls.__logger.debug(f"Successfully sent startup message to user [{user}]")
                 return True
             except Exception as e:
-                cls.__logger.error(f"Can't send message to whitelisted user [{user}]: < {e} >")
+                cls.__logger.error(f"Can't send message to whitelisted user [{user}]: < {str(e)} >")
                 return False
 
 

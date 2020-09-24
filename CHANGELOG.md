@@ -1,8 +1,18 @@
 # Telemonitor Changelog
 
 [Development](https://github.com/maximilionus/Telemonitor/tree/development)
+[**2.1.0**]()
+> This update is focused on improving `cli` usage and features targeting the `Linux` platform
+
+- Overwrite *bot token* and *whitelisted users* with optional startup args `--token` and `--whitelist`
+- Automated systemd service creation for linux platforms implemented
 - Changed logging formatting to display exact used module and function names
-- Automatization for systemd service creation implemented
+- Split startup arguments to groups
+- Added new optional startup arguments *(See [README](./README.md#optional-arguments) for info)*:
+  - `--version`
+  - `--token`
+  - `--whitelist`
+  - `--systemd-service`
 
 
 [**2.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v2.0.0)

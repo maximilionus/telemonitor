@@ -9,8 +9,10 @@ from telemonitor.extensions import systemd_service
 from telemonitor.helpers import TM_Whitelist, TM_ControlInlineKB, cli_arguments_parser, PARSE_MODE, STRS
 
 
+args = cli_arguments_parser()
+
+
 def run():
-    args = cli_arguments_parser()
 
     chdir(path.dirname(__file__))
 
@@ -18,12 +20,13 @@ def run():
     logger = logging.getLogger(__name__)
     logger.info("Telemonitor is starting")
 
+    # Initialize config and read it
     cfg = h.TM_Config().get()
 
     if args.systemd_service is not None:
         systemd_service.cli(args.systemd_service)
 
-    api_token = cfg["api_key"]
+    api_token = cfg["api_key"] if args.token_overwrite is None else args.token_overwrite
     bot = Bot(token=api_token)
     dp = Dispatcher(bot)
 

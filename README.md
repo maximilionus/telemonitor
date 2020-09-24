@@ -27,6 +27,7 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
 - Notification message to all *whitelisted users* on bot startup
 - [File transfer system](#file-transfer-system) *(Currently works only as `file`/`image` receiver)*
 - Modify whitelisted users without restart
+- Support of automated systemd service installation on linux machines (See [optional arguments](#optional-arguments))
 
 ### Development
 Development features are in progress of development and *are unstable*, so they're disabled by default. Enable with [argument `--dev`](#optional-arguments). Use at your own risk and be ready to drown in errors.
@@ -55,12 +56,15 @@ start - Start the bot
 
 
 ## Optional Arguments
-| Arg                       | Description                                                  |
-| :------------------------ | :----------------------------------------------------------- |
-| `-h`, `--help`            | Show help message and exit                                   |
-| `-S`, `--systemd-service` | Automated systemd service installation for `linux` platforms |
-| `--verbose`               | Write more detailed information to log file                  |
-| `--dev`                   | Enable unstable development features                         |
+| Arg                       | Description                                                                                     |
+| :------------------------ | :---------------------------------------------------------------------------------------------- |
+| `-h`, `--help`            | show help message and exit                                                                      |
+| `--version`               | show program's version number and exit                                                          |
+| `--token`                 | Force the bot to run with token from the argument instead of the configuration file             |
+| `--whitelist`             | Force the bot to check whitelisted users from argument instead of the of the configuration file |
+| `-S`, `--systemd-service` | automated systemd service installation for `linux` platforms                                    |
+| `--verbose`               | write more detailed information to log file                                                     |
+| `--dev`                   | enable unstable development features                                                            |
 
 
 ## File Transfer System *(FTS)*
@@ -82,11 +86,15 @@ Configuration file will be automatically checked on each bot start to remove dep
 ### Default Config
 ```jsonc
 {
-    "api_key": "123:token__here", // Telegram bot api token
+    "api_key": "123:token__here",                // Telegram bot api token
     "whitelisted_users": [12345, 54321, 224414], // Array with all whitelisted users ids
-    "log_files_max": 30, // Maximum amount of .log files in logs directory
-    "state_notifications": true, // Enable/Disable notification message on boot and shutdown event
-    "enable_file_transfer": true // Enable/Disable file transfer system
+    "log_files_max": 30,                         // Maximum amount of .log files in logs directory
+    "state_notifications": true,                 // Enable/Disable notification message on boot and shutdown event
+    "enable_file_transfer": true,                // Enable/Disable file transfer system
+    "systemd_service": {                         // Dictionary for linux systemd service status
+        "installed": false,                      // Is service installed
+        "version": -1                            // Version of installed service file
+    }
 }
 ```
 
@@ -94,12 +102,13 @@ Configuration file will be automatically checked on each bot start to remove dep
 ## Supported Platforms
 All list of features and supported platforms.
 
-| Platform →<br>Feature ↓ | Linux | Windows | macOS |
-| :---------------------- | :---- | :------ | :---- |
-| `System Information`    | ✓     | ✓       | ⍻     |
-| `Shutdown` & `Reboot`   | ✓     | ✓       | ⍻     |
-| `Uptime`                | ✓     | ✓       | ⍻     |
-| `File Transfer System`  | ✓     | ✓       | ⍻     |
+| Platform →<br>Feature ↓     | Linux | Windows | macOS |
+| :-------------------------- | :---- | :------ | :---- |
+| `System Information`        | ✓     | ✓       | ⍻     |
+| `Shutdown` & `Reboot`       | ✓     | ✓       | ⍻     |
+| `Uptime`                    | ✓     | ✓       | ⍻     |
+| `File Transfer System`      | ✓     | ✓       | ⍻     |
+| `Automated Systemd Service` | ✓     | ✗       | ✗     |
 
 > *Legend*  
 > `✓` - Available  
