@@ -55,11 +55,12 @@ start - Start the bot
 
 
 ## Optional Arguments
-| Arg            | Description                                 |
-| :------------- | :------------------------------------------ |
-| `-h`, `--help` | Show help message and exit                  |
-| `--verbose`    | Write more detailed information to log file |
-| `--dev`        | Enable unstable development features        |
+| Arg                       | Description                                                  |
+| :------------------------ | :----------------------------------------------------------- |
+| `-h`, `--help`            | Show help message and exit                                   |
+| `-S`, `--systemd-service` | Automated systemd service installation for `linux` platforms |
+| `--verbose`               | Write more detailed information to log file                  |
+| `--dev`                   | Enable unstable development features                         |
 
 
 ## File Transfer System *(FTS)*
@@ -102,7 +103,7 @@ All list of features and supported platforms.
 
 > *Legend*  
 > `✓` - Available  
-> `⍻` - Available but not tested  
+> `⍻` - Available, but not tested  
 > `✗` - Not available
 
 

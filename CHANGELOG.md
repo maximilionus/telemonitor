@@ -2,6 +2,7 @@
 
 [Development](https://github.com/maximilionus/Telemonitor/tree/development)
 - Changed logging formatting to display exact used module and function names
+- Automatization for systemd service creation implemented
 
 
 [**2.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v2.0.0)

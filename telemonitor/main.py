@@ -21,7 +21,7 @@ def run():
     cfg = h.TM_Config().get()
 
     if hasattr(args, 'systemd_service'):
-        systemd_service.start(args.systemd_service)
+        systemd_service.cli(args.systemd_service)
 
     api_token = cfg["api_key"]
     bot = Bot(token=api_token)

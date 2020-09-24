@@ -115,7 +115,7 @@ def cli_arguments_parser() -> object:
     )
     argparser.add_argument('--verbose', help="Write more detailed information to log file", action="store_true")
     argparser.add_argument('--dev', help="Enable unstable development features", action="store_true", dest="dev_features")
-    argparser.add_argument('--systemd-service', '-S', action="store", choices=["install", "upgrade", "remove"], dest="systemd_service", help="Linux systemd service control")
+    argparser.add_argument('--systemd-service', '-S', action="store", choices=["install", "upgrade", "remove", "status"], dest="systemd_service", help="Linux systemd service control")
 
     return argparser.parse_args()
 

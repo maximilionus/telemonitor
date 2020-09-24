@@ -15,11 +15,44 @@ __shell_launch_script_path = './extensions/systemd_service/files/telemonitor_sta
 __service_config_final_path = '/lib/systemd/system/telemonitor-bot.service'
 
 
-def start(mode: str):
+def cli(mode: str):
     if platform == 'linux':
-        if mode == 'install': __install()
-        elif mode == 'upgrade': __upgrade()
-        else: __remove()
+        if mode == 'install':
+            if service_install():
+                print("Successfully installed Telemonitor systemd service to your linux system!",
+                      f"\nName of the service is: {path.basename(__service_config_final_path)}",
+                      "\n\nNow the only thing you need to do is to run command to detect new service:",
+                      "\n\tsystemctl daemon-reload",
+                      "\n\nAnd now you can manually control this service with:",
+                      f"\n\tsystemctl status {path.basename(__service_config_final_path)}  # View Telemonitor logs and current status",
+                      f"\n\tsystemctl start {path.basename(__service_config_final_path)}   # Start the Telemonitor service",
+                      f"\n\tsystemctl stop {path.basename(__service_config_final_path)}    # Stop the Telemonitor service"
+                      f"\n\tsystemctl enable {path.basename(__service_config_final_path)}  # Start Telemonitor service on system launch"
+                      f"\n\tsystemctl disable {path.basename(__service_config_final_path)} # Disable Telemonitor service automatic startup",
+                      "\n\nPlease note, that the commands above will require root user privileges to run."
+                      )
+            else:
+                print("Telemonitor systemd service is already installed on this system")
+
+        elif mode == 'upgrade':
+            service_upgrade()
+
+        elif mode == 'remove':
+            if service_remove():
+                print("Successfully removed service from system")
+            else:
+                print("Systemd service configuration file doesn't exist, nothing to remove")
+
+        elif mode == 'status':
+            cfg_service = TM_Config.get()['systemd_service']
+            text = f"Telemonitor Systemd Service - Status\
+                     \n\n- Is installed: {cfg_service['installed']}"
+
+            if cfg_service['installed']:
+                text += f"\n- Version: {cfg_service['version']}\
+                          \n- Installation path: {__service_config_final_path}"
+            print(text)
+
     else:
         print(f"This feature is available only for linux platforms with systemd support.\nYour platform is {platform}.")
         __logger.error(f"Requested feature is available only on 'linux' platforms with systemd support. Your platform is {platform}")
@@ -27,9 +60,16 @@ def start(mode: str):
     exit()
 
 
-def __install():
-    """ Install systemd service """
+def service_install() -> bool:
+    """ Install systemd service
+
+    Returns:
+        bool:
+            True - Service successfully installed
+            False - Service was not installed
+    """
     __logger.info("Begin systemd service installation")
+    result = False
 
     if not __systemd_config_exists():
         try:
@@ -44,40 +84,40 @@ def __install():
             e_text = f"Can't write systemd service config file to {__service_config_final_path} due to {str(e)}"
             print(e_text)
             __logger.error(e_text)
+        else:
+            __update_cfg_values('install')
+            __logger.info("Systemd service was successfully installed on system.")
+            result = True
         finally:
             template_service_file.close()
             final_service_file.close()
 
-        __update_cfg_values('install')
-
-        __logger.info("Systemd service was successfully installed on system.")
-        print("Successfully installed Telemonitor systemd service to your linux system!",
-              f"\nName of the service is: {path.basename(__service_config_final_path)}",
-              "\n\nNow the only thing you need to do is to run command to detect new service:",
-              "\n\tsystemctl daemon-reload",
-              "\n\nAnd now you can manually control this service with:",
-              f"\n\tsystemctl status {path.basename(__service_config_final_path)}  # View Telemonitor logs and current status",
-              f"\n\tsystemctl start {path.basename(__service_config_final_path)}   # Start the Telemonitor service",
-              f"\n\tsystemctl stop {path.basename(__service_config_final_path)}    # Stop the Telemonitor service"
-              f"\n\tsystemctl enable {path.basename(__service_config_final_path)}  # Start Telemonitor service on system launch"
-              f"\n\tsystemctl disable {path.basename(__service_config_final_path)} # Disable Telemonitor service automatic startup",
-              "\n\nPlease note, that the commands above will require root user privileges to run."
-              )
     else:
-        text = f"Service file already exists in '{__service_config_final_path}'"
-        print(text)
-        __logger.error(text)
+        __logger.error(f"Service file already exists in '{__service_config_final_path}'")
+
+    return result
 
 
-def __upgrade():
-    """ Check systemd service config files and upgrade them to newer version if available """
+def service_upgrade() -> bool:
+    """ Check systemd service config files and upgrade them to newer version if available
+
+    Returns:
+        bool:
+    """
     # TODO
     __logger.info("Begin systemd service upgrade check")
 
 
-def __remove():
-    """ Remove all systemd service files, generated by Telemonitor, from system """
+def service_remove() -> bool:
+    """ Remove all systemd service files, generated by Telemonitor, from system
+
+    Returns:
+        bool:
+            True - Successfully removed service from system
+            False - Can't remove service
+    """
     __logger.info("Begin systemd service removal")
+    result = False
 
     if __systemd_config_exists():
         try:
@@ -88,16 +128,22 @@ def __remove():
             __logger.error(text)
         else:
             __update_cfg_values('remove')
-            text = f"Successfully removed service file on path {__service_config_final_path}"
-            print(text)
-            __logger.info(text)
+            __logger.info(f"Successfully removed service file on path {__service_config_final_path}")
+            result = True
     else:
-        text = "Systemd service configuration file doesn't exist, nothing to remove"
-        print(text)
-        __logger.error(text)
+        __logger.error("Systemd service configuration file doesn't exist, nothing to remove")
+
+    return result
 
 
 def __systemd_config_exists() -> bool:
+    """ Check for systemd config existence
+
+    Returns:
+        bool:
+            True - Config exists
+            False - Can't find any config file
+    """
     return path.isfile(__service_config_final_path)
 
 
