@@ -20,7 +20,7 @@ def run():
 
     cfg = h.TM_Config().get()
 
-    if hasattr(args, 'systemd_service'):
+    if args.systemd_service is not None:
         systemd_service.cli(args.systemd_service)
 
     api_token = cfg["api_key"]
