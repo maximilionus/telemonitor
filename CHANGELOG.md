@@ -15,6 +15,7 @@
   - `--whitelist`
   - `--systemd-service`
   - `--config-check`
+  - `--no-config-check`
 
 
 [**2.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v2.0.0)

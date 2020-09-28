@@ -122,10 +122,11 @@ def cli_arguments_parser() -> object:
     bot_group.add_argument('--token', action='store', type=str, dest='token_overwrite', metavar='STR', help='force the bot to run with token from the argument instead of the configuration file')
     bot_group.add_argument('--whitelist', action='store', type=int, dest='whitelist_overwrite', metavar='INT', nargs='+', help='force the bot to check whitelisted users from argument instead of the of the configuration file')
 
-    dev_group = argparser.add_argument_group('advanced optional arguments')
-    dev_group.add_argument('--dev', help='enable unstable development features', action='store_true', dest='dev_features')
-    dev_group.add_argument('--verbose', '-v', help='write more detailed information to log file', action='store_true')
-    dev_group.add_argument('--config-check', action='store_true', help='run config file initialization procedure and exit', dest='config_check_only')
+    adv_group = argparser.add_argument_group('advanced optional arguments')
+    adv_group.add_argument('--dev', help='enable unstable development features', action='store_true', dest='dev_features')
+    adv_group.add_argument('--verbose', '-v', help='write more detailed information to log file', action='store_true')
+    adv_group.add_argument('--config-check', action='store_true', help='run config file initialization procedure and exit', dest='config_check_only')
+    adv_group.add_argument('--no-config-check', action='store_true', help="don't scan configuration file on start", dest='disable_config_check')
 
     return argparser.parse_args()
 
@@ -256,20 +257,24 @@ class TM_Config:
             self.__logger.info("First start detected")
             exit()
         else:
+            from telemonitor.main import args
+
             cfg = self.get()
 
-            # New way of dict scan
-            config_check_result = self.config_check(cfg)
+            if args.disable_config_check is not None:
+                self.__logger.info('Configuration file check skipped')
+            else:
+                config_check_result = self.config_check(cfg)
 
-            if not config_check_result[0] or config_check_result[1]: self.write(cfg)
+                if not config_check_result[0] or config_check_result[1]: self.write(cfg)
 
-            log_message = "Config file "
-            if config_check_result[0]: log_message += "is up-to-date"
-            else: log_message += "was updated with new keys"
+                log_message = "Config file "
+                if config_check_result[0]: log_message += "is up-to-date"
+                else: log_message += "was updated with new keys"
 
-            if config_check_result[1]: log_message += " and deprecated keys were removed"
+                if config_check_result[1]: log_message += " and deprecated keys were removed"
 
-            self.__logger.info(log_message)
+                self.__logger.info(log_message)
 
     @classmethod
     def create(cls):

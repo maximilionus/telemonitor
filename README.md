@@ -66,7 +66,7 @@ start - Start the bot
 | `--dev`                                                 | enable unstable development features                                                            |
 | `--verbose`, `-v`                                       | write more detailed information to log file                                                     |
 | `--config-check`                                        | run config file initialization procedure and exit                                               |
-
+| `--no-config-check`                                     | don't scan configuration file on start                                                          |
 
 ## File Transfer System *(FTS)*
 This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./Telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
