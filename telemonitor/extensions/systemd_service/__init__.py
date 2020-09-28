@@ -65,9 +65,7 @@ def service_install() -> bool:
     """ Install systemd service
 
     Returns:
-        bool:
-            True - Service successfully installed
-            False - Service was not installed
+        bool: Was service installed
     """
     __logger.info("Begin systemd service installation")
     result = False
@@ -83,7 +81,7 @@ def service_install() -> bool:
             final_service_file.write(text)
         except Exception as e:
             e_text = f"Can't write systemd service config file to {__service_config_final_path} due to {str(e)}"
-            print(e_text)
+            print(e_text + '\n')
             __logger.error(e_text)
         else:
             __update_cfg_values('install')
@@ -125,6 +123,7 @@ def service_upgrade() -> bool:
                     )
                     if service_install():
                         print("- Successfully installed new systemd service")
+                        __update_cfg_values('upgrade')
                         print(f"\nService was successfully upgraded from version '{installed_version}' to '{builtin_version}'")
                         was_updated = True
     else:
