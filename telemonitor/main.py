@@ -13,7 +13,6 @@ args = cli_arguments_parser()
 
 
 def run():
-
     chdir(path.dirname(__file__))
 
     h.init_logger(args.verbose)
@@ -22,6 +21,7 @@ def run():
 
     # Initialize config and read it
     cfg = h.TM_Config().get()
+    if args.config_check_only: exit()
 
     if args.systemd_service is not None:
         systemd_service.cli(args.systemd_service)

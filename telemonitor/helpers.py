@@ -125,6 +125,7 @@ def cli_arguments_parser() -> object:
     dev_group = argparser.add_argument_group('advanced optional arguments')
     dev_group.add_argument('--dev', help='enable unstable development features', action='store_true', dest='dev_features')
     dev_group.add_argument('--verbose', '-v', help='write more detailed information to log file', action='store_true')
+    dev_group.add_argument('--config-check', action='store_true', help='run config file initialization procedure and exit', dest='config_check_only')
 
     return argparser.parse_args()
 
@@ -210,8 +211,10 @@ class TM_Whitelist:
         """
         from telemonitor.main import args
         cls.__logger.debug('Whitelist read request')
-        cls.__logger.debug(args.whitelist_overwrite)
-        return TM_Config.get()["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
+        whitelist = TM_Config.get()["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
+        cls.__logger.debug(f"Whitelist content: {whitelist}")
+
+        return whitelist
 
     @classmethod
     async def send_to_all(cls, bot: object, message: str) -> bool:
@@ -254,28 +257,17 @@ class TM_Config:
             exit()
         else:
             cfg = self.get()
-            up_to_date = True
-            has_deprecated_values = False
 
-            # Add not existing values
-            for def_key in DEF_CFG:
-                if def_key not in cfg:
-                    up_to_date = False
-                    cfg.update({def_key: DEF_CFG[def_key]})
+            # New way of dict scan
+            config_check_result = self.config_check(cfg)
 
-            # Delete deprecated values
-            for key in tuple(cfg):
-                if key not in DEF_CFG:
-                    has_deprecated_values = True
-                    del(cfg[key])
-
-            if not up_to_date or has_deprecated_values: self.write(cfg)
+            if not config_check_result[0] or config_check_result[1]: self.write(cfg)
 
             log_message = "Config file "
-            if up_to_date: log_message += "is up-to-date"
+            if config_check_result[0]: log_message += "is up-to-date"
             else: log_message += "was updated with new keys"
 
-            if has_deprecated_values: log_message += " and deprecated keys were removed"
+            if config_check_result[1]: log_message += " and deprecated keys were removed"
 
             self.__logger.info(log_message)
 
@@ -338,3 +330,47 @@ class TM_Config:
                 False - Config file doesn't exist.
         """
         return True if os.path.isfile(PATH_CFG) else False
+
+    @classmethod
+    def config_check(cls, config: dict) -> tuple:
+        """ Configuration file recursive check system
+
+        Args:
+            config (dict): Parsed configuration file
+
+        Returns:
+            tuple: (
+                bool  # up_to_date,
+                bool  # has_deprecated_keys
+            )
+        """
+        def add_new_keys(default_config=DEF_CFG, user_config=config) -> bool:
+            up_to_date = True
+
+            for k, v in list(default_config.items()):
+                if type(v) == dict:
+                    up_to_date = add_new_keys(v, user_config[k])
+                elif k not in user_config:
+                    up_to_date = False
+                    user_config.update({k: v})
+                    cls.__logger.debug(f"Adding new key '{k}' to user configuration file")
+
+            return up_to_date
+
+        def remove_deprecated(default_config=DEF_CFG, user_config=config) -> bool:
+            has_deprecated_values = False
+
+            for k, v in list(user_config.items()):
+                if type(v) == dict:
+                    has_deprecated_values = remove_deprecated(default_config[k], v)
+                elif k not in default_config:
+                    has_deprecated_values = True
+                    del(user_config[k])
+                    cls.__logger.debug(f"Removing deprecated key '{k}' from user configuration file")
+
+            return has_deprecated_values
+
+        return (
+            add_new_keys(),
+            remove_deprecated()
+        )
