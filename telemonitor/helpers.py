@@ -201,10 +201,7 @@ class TM_Whitelist:
                 False - User is not whitelisted.
         """
         users = cls.get_whitelist()
-        if user_id in users:
-            return True
-        else:
-            return False
+        return user_id in users
 
     @classmethod
     def get_whitelist(cls) -> list:
