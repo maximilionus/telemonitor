@@ -103,10 +103,36 @@ def service_upgrade() -> bool:
     """ Check systemd service config files and upgrade them to newer version if available
 
     Returns:
-        bool:
+        bool: Was service updated
     """
-    # TODO
+    was_updated = False
     __logger.info("Begin systemd service upgrade check")
+
+    if __systemd_config_exists():
+        config = TM_Config.get()
+
+        builtin_version = __version
+        installed_version = config["systemd_service"]["version"]
+
+        if installed_version < builtin_version:
+            choice = input(f"Service file can be upgraded to version '{builtin_version}' (Current version: '{installed_version}'). Upgrade? [y/n]: ")
+            if choice[0].lower() == 'y':
+                print(f"\n- Removing installed version '{installed_version}' service from system...")
+                if service_remove():
+                    print(
+                        "- Installed version of service was removed",
+                        f"\n- Installing the systemd service version '{builtin_version}' to system..."
+                    )
+                    if service_install():
+                        print("- Successfully installed new systemd service")
+                        print(f"\nService was successfully upgraded from version '{installed_version}' to '{builtin_version}'")
+                        was_updated = True
+    else:
+        text = "Service is not installed, nothing to upgrade"
+        __logger.info(text)
+        print(text)
+
+    return was_updated
 
 
 def service_remove() -> bool:
