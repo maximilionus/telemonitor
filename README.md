@@ -56,16 +56,16 @@ start - Start the bot
 
 
 ## Optional Arguments
-| Arg                       | Description                                                                                     |
-| :------------------------ | :---------------------------------------------------------------------------------------------- |
-| `-h`, `--help`            | show help message and exit                                                                      |
-| `--version`               | show program's version number and exit                                                          |
-| `--token`                 | force the bot to run with token from the argument instead of the configuration file             |
-| `--whitelist`             | force the bot to check whitelisted users from argument instead of the of the configuration file |
-| `-S`, `--systemd-service` | automated systemd service installation for `linux` platforms                                    |
-| `--dev`                   | enable unstable development features                                                            |
-| `--verbose`, `-v`         | write more detailed information to log file                                                     |
-| `--config-check`          | run config file initialization procedure and exit                                               |
+| Arg                                                     | Description                                                                                     |
+| :------------------------------------------------------ | :---------------------------------------------------------------------------------------------- |
+| `-h`, `--help`                                          | show help message and exit                                                                      |
+| `--version`                                             | show program's version number and exit                                                          |
+| `--token` STR                                           | force the bot to run with token from the argument instead of the configuration file             |
+| `--whitelist` INT [INT ...]                             | force the bot to check whitelisted users from argument instead of the of the configuration file |
+| `-S`, `--systemd-service` install/upgrade/remove/status | automated systemd service control for `linux` platforms                                         |
+| `--dev`                                                 | enable unstable development features                                                            |
+| `--verbose`, `-v`                                       | write more detailed information to log file                                                     |
+| `--config-check`                                        | run config file initialization procedure and exit                                               |
 
 
 ## File Transfer System *(FTS)*
