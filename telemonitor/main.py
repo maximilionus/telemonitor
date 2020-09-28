@@ -26,7 +26,7 @@ def run():
     if args.systemd_service is not None:
         systemd_service.cli(args.systemd_service)
 
-    api_token = cfg["api_key"] if args.token_overwrite is None else args.token_overwrite
+    api_token = cfg["bot"]["token"] if args.token_overwrite is None else args.token_overwrite
     bot = Bot(token=api_token)
     dp = Dispatcher(bot)
 
@@ -44,7 +44,7 @@ def run():
                 reply_markup=ikb.keyboard
             )
 
-    if cfg["enable_file_transfer"]:
+    if cfg["bot"]["enable_file_transfer"]:
         @dp.message_handler(content_types=['document', 'photo'])
         async def __file_transfer(message: types.Message):
             if TM_Whitelist.is_whitelisted(message.from_user.id):
@@ -62,8 +62,8 @@ def run():
     executor.start_polling(
         dp,
         skip_updates=True,
-        on_startup=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_startup)) if cfg["state_notifications"] else None,
-        on_shutdown=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_shutdown)) if cfg["state_notifications"] and args.dev_features else None
+        on_startup=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_startup)) if cfg["bot"]["state_notifications"] else None,
+        on_shutdown=(lambda _: TM_Whitelist.send_to_all(bot, STRS.message_shutdown)) if cfg["bot"]["state_notifications"] and args.dev_features else None
     )
 
 

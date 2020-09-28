@@ -6,6 +6,10 @@
 
 - Overwrite *bot token* and *whitelisted users* with optional startup args `--token` and `--whitelist`
 - Automated systemd service creation for linux platforms implemented
+- Configuration file structure update to version `2` *(Automatic merge from version 1 is implemented too)*
+  - Moved all bot related keys to `"bot": {}`
+  - Renamed `"api_key"` to `"token"`
+  - Added `"systemd_service"` key for systemd service params
 - Enhanced configuration file scanning procedure *(for detection of deprecated and new, not added, keys)*
 - Changed logging formatting to display exact used module and function names and show application name and version only on first line of log file
 - Split startup arguments to groups

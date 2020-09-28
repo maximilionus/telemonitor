@@ -22,11 +22,14 @@ PATH_CFG = "./config.json"
 PATH_SHARED_DIR = "./Shared"
 PARSE_MODE = ParseMode.MARKDOWN_V2
 DEF_CFG = {
-    "api_key": "",
-    "whitelisted_users": [],
+    "config_version": 2,
     "log_files_max": MAX_LOGS,
-    "state_notifications": True,
-    "enable_file_transfer": True,
+    "bot": {
+        "token": "",
+        "whitelisted_users": [],
+        "state_notifications": True,
+        "enable_file_transfer": True
+    },
     "systemd_service": {
         "version": -1
     }
@@ -212,7 +215,7 @@ class TM_Whitelist:
         """
         from telemonitor.main import args
         cls.__logger.debug('Whitelist read request')
-        whitelist = TM_Config.get()["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
+        whitelist = TM_Config.get()["bot"]["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
         cls.__logger.debug(f"Whitelist content: {whitelist}")
 
         return whitelist
@@ -261,12 +264,12 @@ class TM_Config:
 
             cfg = self.get()
 
-            if args.disable_config_check is not None:
+            if args.disable_config_check:
                 self.__logger.info('Configuration file check skipped')
             else:
                 config_check_result = self.config_check(cfg)
 
-                if not config_check_result[0] or config_check_result[1]: self.write(cfg)
+                if not config_check_result[0] or config_check_result[1] or config_check_result[2]: self.write(cfg)
 
                 log_message = "Config file "
                 if config_check_result[0]: log_message += "is up-to-date"
@@ -282,8 +285,8 @@ class TM_Config:
         cls.write(DEF_CFG)
         cls.__logger.info("Config file was generated.")
 
-    @staticmethod
-    def write(config_dict: dict):
+    @classmethod
+    def write(cls, config_dict: dict):
         """ Rewrite configuration file with new values.
 
         Args:
@@ -291,6 +294,7 @@ class TM_Config:
         """
         with open(PATH_CFG, 'wt') as f:
             json.dump(config_dict, f, indent=4)
+        cls.__logger.debug("Successful write request to configuration file")
 
     @classmethod
     def get(cls) -> dict:
@@ -322,8 +326,7 @@ class TM_Config:
             return True
         else:
             cfg_modtime = os.path.getmtime(PATH_CFG)
-            if cfg_modtime > cls.__last_mod_time: return True
-            else: return False
+            return cfg_modtime > cls.__last_mod_time
 
     @staticmethod
     def is_exist() -> bool:
@@ -341,14 +344,39 @@ class TM_Config:
         """ Configuration file recursive check system
 
         Args:
-            config (dict): Parsed configuration file
+            config (dict): Parsed configuration file that will be modified
 
         Returns:
             tuple: (
-                bool  # up_to_date,
-                bool  # has_deprecated_keys
+                bool,  # up to date
+                bool,  # has deprecated keys
+                bool   # was merged to newer version
             )
         """
+        def special_update_check() -> bool:
+            """ Non-automatic config updater for correct merge between major config file updates
+
+            Returns:
+                bool: Was config file updated
+            """
+            is_updated = False
+
+            if "config_version" not in config:
+                # Update config dict to version 2
+                # First version of config file doesn't have key 'config_version'
+                config.update({
+                    "bot": {
+                        "token": config.get("api_key", ""),
+                        "whitelisted_users": config.get("whitelisted_users", []),
+                        "state_notifications": config.get("state_notifications", DEF_CFG["bot"]["state_notifications"]),
+                        "enable_file_transfer": config.get("enable_file_transfer", DEF_CFG["bot"]["enable_file_transfer"])
+                    }
+                })
+                is_updated = True
+                cls.__logger.info("Successfully merged config file to version 2")
+
+            return is_updated
+
         def add_new_keys(default_config=DEF_CFG, user_config=config) -> bool:
             up_to_date = True
 
@@ -375,7 +403,13 @@ class TM_Config:
 
             return has_deprecated_values
 
+        # Prepare output in right order
+        special_check = special_update_check()
+        any_deprecated = remove_deprecated()
+        any_new = add_new_keys()
+
         return (
-            add_new_keys(),
-            remove_deprecated()
+            any_new,
+            any_deprecated,
+            special_check
         )

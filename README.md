@@ -87,15 +87,22 @@ Configuration file will be automatically checked on each bot start to remove dep
 ### Default Config
 ```jsonc
 {
-    "api_key": "123:token__here",                // Telegram bot api token
-    "whitelisted_users": [12345, 54321, 224414], // Array with all whitelisted users ids
-    "log_files_max": 30,                         // Maximum amount of .log files in logs directory
-    "state_notifications": true,                 // Enable/Disable notification message on boot and shutdown event
-    "enable_file_transfer": true,                // Enable/Disable file transfer system
-    "systemd_service": {                         // Dictionary for linux systemd service status
-        "version": -1                            // Version of installed service file
+    "config_version": 2,            // Version of configuration file. Used for correct keys migration on update
+    "log_files_max": 30,            // Maximum amount of .log files in logs directory
+    "bot": {
+        "token": "123:token__here", // Telegram bot api token
+        "whitelisted_users": [      // Array with all whitelisted users ids
+            000000000,
+            111111111
+        ],
+        "state_notifications": true, // Enable/Disable notification message on boot and shutdown event
+        "enable_file_transfer": true // Enable/Disable file transfer system
+    },
+    "systemd_service": {             // Dictionary for linux systemd service status
+        "version": -1                // Version of installed service file
     }
 }
+
 ```
 
 
