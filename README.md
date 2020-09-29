@@ -29,7 +29,7 @@ Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiog
 - Notification message to all *whitelisted users* on bot startup
 - [File transfer system](#file-transfer-system) *(Currently works only as `file`/`image` receiver)*
 - Modify whitelisted users without restart
-- Support of automated systemd service installation on linux machines (See [optional arguments](#optional-arguments))
+- Support of automated systemd service generation on linux machines (See [Systemd Service Control](#systemd-service-control))
 
 ### Development
 Development features are in progress of development and *are unstable*, so they're disabled by default. Enable with [argument `--dev`](#optional-arguments). Use at your own risk and be ready to drown in errors.
