@@ -251,30 +251,42 @@ class TM_Config:
         If the configuration file is not found - it will be created.
         If the configuration file is found - it will be checked for all necessary values.
         """
+        from telemonitor.main import args
+
         if not self.is_exist():
             self.create()
-            print(f"Config file was generated in < {os.path.abspath(PATH_CFG)} >.\nFirst, you need to configure it's values and then run the script again.")
             self.__logger.info("First start detected")
-            exit()
-        else:
-            from telemonitor.main import args
+            print(f"Config file was generated in < {os.path.abspath(PATH_CFG)} >.")
 
-            cfg = self.get()
-
-            if args.disable_config_check:
-                self.__logger.info('Configuration file check skipped')
+            if args.token_overwrite and args.whitelist_overwrite:
+                text = "Reading bot token and whitelist from input arguments"
+                self.__logger.info(text)
+                print(text)
             else:
-                config_check_result = self.config_check(cfg)
+                # Generate config file and exit if no token and whitelist startup args provided
+                print("First, you need to configure it's values and then run the script again.")
+                exit()
 
-                if not config_check_result[0] or config_check_result[1] or config_check_result[2]: self.write(cfg)
+        cfg = self.get()
 
-                log_message = "Config file "
-                if config_check_result[0]: log_message += "is up-to-date"
-                else: log_message += "was updated with new keys"
+        if args.disable_config_check:
+            self.__logger.info('Configuration file check skipped')
+        else:
+            config_check_result = self.config_check(cfg)
 
-                if config_check_result[1]: log_message += " and deprecated keys were removed"
+            if not config_check_result[0] or config_check_result[1] or config_check_result[2]:
+                self.write(cfg)
 
-                self.__logger.info(log_message)
+            log_message = "Config file "
+            if config_check_result[0]:
+                log_message += "is up-to-date"
+            else:
+                log_message += "was updated with new keys"
+
+            if config_check_result[1]:
+                log_message += " and deprecated keys were removed"
+
+            self.__logger.info(log_message)
 
     @classmethod
     def create(cls):
