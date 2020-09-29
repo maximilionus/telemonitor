@@ -7,10 +7,12 @@
   - [How to run](#how-to-run)
   - [Bot Commands](#bot-commands)
   - [Optional Arguments](#optional-arguments)
-  - [File Transfer System *(FTS)*](#file-transfer-system-fts)
-    - [How to use](#how-to-use)
   - [Configuration File](#configuration-file)
     - [Default Config](#default-config)
+  - [File Transfer System *(FTS)*](#file-transfer-system-fts)
+    - [How to](#how-to)
+  - [Systemd Service Control](#systemd-service-control)
+    - [How to](#how-to-1)
   - [Supported Platforms](#supported-platforms)
   - [Logging](#logging)
 
@@ -56,27 +58,17 @@ start - Start the bot
 
 
 ## Optional Arguments
-| Arg                                                     | Description                                                                              |
-| :------------------------------------------------------ | :--------------------------------------------------------------------------------------- |
-| `-h`, `--help`                                          | show help message and exit                                                               |
-| `--version`                                             | show program's version number and exit                                                   |
-| `--token` STR                                           | force the bot to run with token from the argument instead of the configuration file      |
-| `--whitelist` INT [INT ...]                             | force the bot to check whitelisted users from argument instead of the configuration file |
-| `-S`, `--systemd-service` install/upgrade/remove/status | automated systemd service control for `linux` platforms                                  |
-| `--dev`                                                 | enable unstable development features                                                     |
-| `--verbose`, `-v`                                       | write more detailed information to log file                                              |
-| `--config-check`                                        | run config file initialization procedure and exit                                        |
-| `--no-config-check`                                     | don't scan configuration file on start                                                   |
-
-## File Transfer System *(FTS)*
-This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./Telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
-
-> Note that **all transfered files will be stored on Telegram servers!**
-
-> Currently this system supports only `documents` and `images` transfer **only from** *whitelisted telegram user* to *bot's host machine*
-
-### How to use
-- Simply send any `file`/`image` to bot from your client and you will receive notification when all files will be downloaded to host.
+| Arg                                               | Description                                                                              |
+| :------------------------------------------------ | :--------------------------------------------------------------------------------------- |
+| `-h`, `--help`                                    | show help message and exit                                                               |
+| `--version`                                       | show program's version number and exit                                                   |
+| `--token` STR                                     | force the bot to run with token from the argument instead of the configuration file      |
+| `--whitelist` INT [INT ...]                       | force the bot to check whitelisted users from argument instead of the configuration file |
+| `--systemd-service` install/upgrade/remove/status | automated systemd service control for `linux` platforms                                  |
+| `--dev`                                           | enable unstable development features                                                     |
+| `--verbose`, `-v`                                 | write more detailed information to log file                                              |
+| `--config-check`                                  | run config file initialization procedure and exit                                        |
+| `--no-config-check`                               | don't scan configuration file on start                                                   |
 
 
 ## Configuration File
@@ -92,7 +84,7 @@ Configuration file will be automatically checked on each bot start to remove dep
     "bot": {
         "token": "123:token__here", // Telegram bot api token
         "whitelisted_users": [      // Array with all whitelisted users ids
-            000000000,
+            000000000,              // Sample ids
             111111111
         ],
         "state_notifications": true, // Enable/Disable notification message on boot and shutdown event
@@ -106,6 +98,45 @@ Configuration file will be automatically checked on each bot start to remove dep
 ```
 
 
+## File Transfer System *(FTS)*
+This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./Telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
+
+> Note that **all transfered files will be stored on Telegram servers!**
+
+> Currently this system supports only `documents` and `images` transfer **only from** *whitelisted telegram user* to *bot's host machine*
+
+### How to
+- Simply send any `file`/`image` to bot from your client and you will receive notification when all files will be downloaded to host.
+
+
+## Systemd Service Control
+There's speical feature available **only** for `linux` platforms with `systemd` software suite. It provides user-friendly CLI to control *(install, remove, upgrade)* **systemd service**.
+
+### How to
+> Please note that you must run Telemonitor as root to install the service correctly.
+
+> You will get output with the result of all CLI commands to your terminal and [log file](#logging)
+
+- Installation of service is pretty easy. You should just run
+  ```bash
+  poetry run telem --systemd-service install
+  ```
+- To uninstall the service, run:
+  ```bash
+  poetry run telem --systemd-service remove
+  ```
+- Getting service status *(like service version)* can be done this way
+  ```bash
+  poetry run telem --systemd-service status
+  ```
+  > Note that this CLI command does not display service detailed information. To get this one you should use system command `systemctl status service-name-here`
+- Checking installed service for any available upgrade
+  ```bash
+  poetry run telem --systemd-service upgrade
+  ```
+  > If any updates are available, you will be prompted to confirm their installation.
+
+
 ## Supported Platforms
 All list of features and supported platforms.
 
@@ -117,7 +148,7 @@ All list of features and supported platforms.
 | `File Transfer System`      | ✓     | ✓       | ⍻     |
 | `Automated Systemd Service` | ✓     | ✗       | ✗     |
 
-> *Legend*  
+> *Legend :*  
 > `✓` - Available  
 > `⍻` - Available, but not tested  
 > `✗` - Not available
