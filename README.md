@@ -56,17 +56,17 @@ start - Start the bot
 
 
 ## Optional Arguments
-| Arg                                                     | Description                                                                                     |
-| :------------------------------------------------------ | :---------------------------------------------------------------------------------------------- |
-| `-h`, `--help`                                          | show help message and exit                                                                      |
-| `--version`                                             | show program's version number and exit                                                          |
-| `--token` STR                                           | force the bot to run with token from the argument instead of the configuration file             |
-| `--whitelist` INT [INT ...]                             | force the bot to check whitelisted users from argument instead of the of the configuration file |
-| `-S`, `--systemd-service` install/upgrade/remove/status | automated systemd service control for `linux` platforms                                         |
-| `--dev`                                                 | enable unstable development features                                                            |
-| `--verbose`, `-v`                                       | write more detailed information to log file                                                     |
-| `--config-check`                                        | run config file initialization procedure and exit                                               |
-| `--no-config-check`                                     | don't scan configuration file on start                                                          |
+| Arg                                                     | Description                                                                              |
+| :------------------------------------------------------ | :--------------------------------------------------------------------------------------- |
+| `-h`, `--help`                                          | show help message and exit                                                               |
+| `--version`                                             | show program's version number and exit                                                   |
+| `--token` STR                                           | force the bot to run with token from the argument instead of the configuration file      |
+| `--whitelist` INT [INT ...]                             | force the bot to check whitelisted users from argument instead of the configuration file |
+| `-S`, `--systemd-service` install/upgrade/remove/status | automated systemd service control for `linux` platforms                                  |
+| `--dev`                                                 | enable unstable development features                                                     |
+| `--verbose`, `-v`                                       | write more detailed information to log file                                              |
+| `--config-check`                                        | run config file initialization procedure and exit                                        |
+| `--no-config-check`                                     | don't scan configuration file on start                                                   |
 
 ## File Transfer System *(FTS)*
 This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./Telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
