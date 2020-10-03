@@ -8,6 +8,7 @@ from math import floor
 from time import strftime, asctime
 from sys import platform as sys_platform
 
+import colorama
 from uptime import uptime
 from aiogram import types, Dispatcher, Bot
 from aiogram.utils.markdown import code, bold, italic
@@ -45,19 +46,42 @@ class STRS:
     message_shutdown = code("System is shutting down")
 
 
+def tm_colorama() -> colorama:
+    """ Wrapper around colorama module with feature to disable the colored output
+
+    Returns:
+        colorama: Colorama module ready for use
+    """
+    from telemonitor.main import args
+
+    colorama_obj = colorama
+
+    if args.disable_colored_output:
+        # Overwrite all class variables with empty string to disable colored print
+        for attr in ("Back", "Cursor", "Fore", "Style"):
+            attr_dict = getattr(colorama_obj, attr).__dict__
+
+            for k in attr_dict:
+                attr_dict[k] = ""
+
+    return colorama_obj
+
+
 def init_logger(is_verbose: bool = False):
     """ Initialize python `logging` module
 
     Args:
         is_verbose (bool, optional): Write more detailed information to log file. Defaults to False.
     """
+    colorama = tm_colorama()
+
     if not os.path.isdir(DIR_LOG):
         os.makedirs(DIR_LOG)
     else:
         log_files = [f for f in os.listdir(DIR_LOG) if os.path.isfile(os.path.join(DIR_LOG, f))]
         log_files_len = len(log_files)
         if log_files_len > (TM_Config.get().get("log_files_max", MAX_LOGS) if TM_Config.is_exist() else MAX_LOGS):
-            print(f"Clearing logs folder. {log_files_len} files will be removed")
+            print(f"- Clearing logs folder. {colorama.Fore.RED}{log_files_len}{colorama.Fore.RESET} files will be removed")
             for log_file in log_files:
                 os.remove(os.path.join(DIR_LOG, log_file))
 
@@ -120,6 +144,7 @@ def cli_arguments_parser() -> object:
     )
     argparser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
     argparser.add_argument('--systemd-service', action='store', choices=['install', 'upgrade', 'remove', 'status'], dest='systemd_service', help='linux systemd Telemonitor service control')
+    argparser.add_argument('--no-color', action='store_true', dest='disable_colored_output', help="disable colored output (ANSI escape sequences)")
 
     bot_group = argparser.add_argument_group('bot control optional arguments')
     bot_group.add_argument('--token', action='store', type=str, dest='token_overwrite', metavar='STR', help='force the bot to run with token from the argument instead of the configuration file')
@@ -253,15 +278,16 @@ class TM_Config:
         """
         from telemonitor.main import args
 
+        colorama = tm_colorama()
         if not self.is_exist():
             self.create()
             self.__logger.info("First start detected")
-            print(f"Config file was generated in < {os.path.abspath(PATH_CFG)} >.")
+            print(f"Config file was generated in {colorama.Fore.CYAN}{os.path.abspath(PATH_CFG)}")
 
             if args.token_overwrite and args.whitelist_overwrite:
                 text = "Reading bot token and whitelist from input arguments"
                 self.__logger.info(text)
-                print(text)
+                print('- ' + text)
             else:
                 # Generate config file and exit if no token and whitelist startup args provided
                 print("First, you need to configure it's values and then run the script again.")

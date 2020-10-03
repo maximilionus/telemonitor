@@ -2,7 +2,7 @@ from sys import platform
 from logging import getLogger
 from os import path, remove
 
-from telemonitor.helpers import TM_Config, DEF_CFG
+from telemonitor.helpers import TM_Config, DEF_CFG, tm_colorama
 
 
 __version = 1
@@ -16,19 +16,21 @@ __service_config_final_path = '/lib/systemd/system/telemonitor-bot.service'
 
 
 def cli(mode: str):
+    colorama = tm_colorama()
+
     if platform == 'linux':
         if mode == 'install':
             if service_install():
                 print("Successfully installed Telemonitor systemd service to your linux system!",
-                      f"\nName of the service is: {path.basename(__service_config_final_path)}",
-                      "\n\nNow the only thing you need to do is to run command to detect new service:",
-                      "\n\tsystemctl daemon-reload",
+                      f"\nName of the service is: {colorama.Fore.CYAN}{path.basename(__service_config_final_path)}{colorama.Fore.RESET}",
+                      "\n\nNow the only thing you need to do is to run this command to detect a new service:",
+                      f"\n\t{colorama.Fore.GREEN}systemctl daemon-reload{colorama.Fore.RESET}",
                       "\n\nAnd now you can manually control this service with:",
-                      f"\n\tsystemctl status {path.basename(__service_config_final_path)}  # View Telemonitor logs and current status",
-                      f"\n\tsystemctl start {path.basename(__service_config_final_path)}   # Start the Telemonitor service",
-                      f"\n\tsystemctl stop {path.basename(__service_config_final_path)}    # Stop the Telemonitor service"
-                      f"\n\tsystemctl enable {path.basename(__service_config_final_path)}  # Start Telemonitor service on system launch"
-                      f"\n\tsystemctl disable {path.basename(__service_config_final_path)} # Disable Telemonitor service automatic startup",
+                      f"\n\t{colorama.Fore.GREEN}systemctl status {path.basename(__service_config_final_path)}{colorama.Fore.RESET}  # View Telemonitor logs and current status",
+                      f"\n\t{colorama.Fore.GREEN}systemctl start {path.basename(__service_config_final_path)}{colorama.Fore.RESET}   # Start the Telemonitor service",
+                      f"\n\t{colorama.Fore.GREEN}systemctl stop {path.basename(__service_config_final_path)}{colorama.Fore.RESET}    # Stop the Telemonitor service"
+                      f"\n\t{colorama.Fore.GREEN}systemctl enable {path.basename(__service_config_final_path)}{colorama.Fore.RESET}  # Start Telemonitor service on system launch"
+                      f"\n\t{colorama.Fore.GREEN}systemctl disable {path.basename(__service_config_final_path)}{colorama.Fore.RESET} # Disable Telemonitor service automatic startup",
                       "\n\nPlease note, that the commands above will require root user privileges to run."
                       )
             else:
@@ -47,15 +49,15 @@ def cli(mode: str):
             cfg_service = TM_Config.get()['systemd_service']
             service_exists = __systemd_config_exists()
             text = f"Telemonitor Systemd Service - Status\
-                     \n\n- Is installed: {service_exists}"
+                     \n\n- Is installed: {colorama.Fore.CYAN}{service_exists}{colorama.Fore.RESET}"
 
             if service_exists:
-                text += f"\n- Version: {cfg_service['version']}\
-                          \n- Installation path: {__service_config_final_path}"
+                text += f"\n- Version: {colorama.Fore.CYAN}{cfg_service['version']}{colorama.Fore.RESET}\
+                          \n- Installation path: {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}"
             print(text)
 
     else:
-        print(f"This feature is available only for linux platforms with systemd support.\nYour platform is {platform}.")
+        print(f"This feature is available only for {colorama.Fore.CYAN}linux{colorama.Fore.RESET} platforms with systemd support.\nYour platform is {colorama.Fore.CYAN}{platform}{colorama.Fore.RESET}.")
         __logger.error(f"Requested feature is available only on 'linux' platforms with systemd support. Your platform is {platform}")
 
     exit()
@@ -68,6 +70,7 @@ def service_install() -> bool:
         bool: Was service installed
     """
     __logger.info("Begin systemd service installation")
+    colorama = tm_colorama()
     result = False
 
     if not __systemd_config_exists():
@@ -81,7 +84,7 @@ def service_install() -> bool:
             final_service_file.write(text)
         except Exception as e:
             e_text = f"Can't write systemd service config file to {__service_config_final_path} due to {str(e)}"
-            print(e_text + '\n')
+            print(f"{colorama.Fore.RED}{e_text}\n")
             __logger.error(e_text)
         else:
             __update_cfg_values('install')
@@ -104,6 +107,7 @@ def service_upgrade() -> bool:
         bool: Was service updated
     """
     was_updated = False
+    colorama = tm_colorama()
     __logger.info("Begin systemd service upgrade check")
 
     if __systemd_config_exists():
@@ -113,18 +117,18 @@ def service_upgrade() -> bool:
         installed_version = config["systemd_service"]["version"]
 
         if installed_version < builtin_version:
-            choice = input(f"Service file can be upgraded to version '{builtin_version}' (Current version: '{installed_version}'). Upgrade? [y/n]: ")
+            choice = input(f"Service file can be upgraded to version {colorama.Fore.CYAN}{builtin_version}{colorama.Fore.RESET} (Current version: {colorama.Fore.CYAN}{installed_version}{colorama.Fore.RESET}). Upgrade? {colorama.Fore.GREEN}[y/n]{colorama.Fore.RESET}: ")
             if choice[0].lower() == 'y':
-                print(f"\n- Removing installed version '{installed_version}' service from system...")
+                print(f"\n- Removing installed version {colorama.Fore.CYAN}{installed_version}{colorama.Fore.RESET} service from system...")
                 if service_remove():
                     print(
                         "- Installed version of service was removed",
-                        f"\n- Installing the systemd service version '{builtin_version}' to system..."
+                        f"\n- Installing the systemd service version {colorama.Fore.CYAN}{builtin_version}{colorama.Fore.RESET} to system..."
                     )
                     if service_install():
                         print("- Successfully installed new systemd service")
                         __update_cfg_values('upgrade')
-                        print(f"\nService was successfully upgraded from version '{installed_version}' to '{builtin_version}'")
+                        print(f"\nService was successfully upgraded from version {colorama.Fore.CYAN}{installed_version}{colorama.Fore.RESET} to {colorama.Fore.CYAN}{builtin_version}{colorama.Fore.RESET}")
                         was_updated = True
     else:
         text = "Service is not installed, nothing to upgrade"
@@ -144,17 +148,17 @@ def service_remove() -> bool:
     """
     __logger.info("Begin systemd service removal")
     result = False
+    colorama = tm_colorama()
 
     if __systemd_config_exists():
         try:
             remove(__service_config_final_path)
         except Exception as e:
-            text = f"Can't remove systemd service file in {__service_config_final_path} due to {str(e)}"
-            print(text)
-            __logger.error(text)
+            print(f"Can't remove systemd service file in {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET} due to {colorama.Fore.RED}{str(e)}")
+            __logger.error(f"Can't remove systemd service file in {__service_config_final_path} due to {str(e)}")
         else:
             __update_cfg_values('remove')
-            __logger.info(f"Successfully removed service file on path {__service_config_final_path}")
+            __logger.info(f"Successfully removed service file on path {colorama.Fore.CYAN}{__service_config_final_path}")
             result = True
     else:
         __logger.error("Systemd service configuration file doesn't exist, nothing to remove")

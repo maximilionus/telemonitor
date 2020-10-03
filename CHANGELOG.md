@@ -2,10 +2,11 @@
 
 [Development](https://github.com/maximilionus/Telemonitor/tree/development)
 [**2.1.0**]()
-> This update is focused on improving `cli` usage and features targeting the `Linux` platform and enhancing core features
+> This update is focused on improving `CLI` usage, features targeting the `Linux` platform and enhancing core structure
 
-- Overwrite *bot token* and *whitelisted users* with optional startup args `--token` and `--whitelist`
 - Automated systemd service creation for linux platforms implemented
+- Added colored output for CLI output to enhance readability
+- Overwrite *bot token* and *whitelisted users* with optional startup args `--token` and `--whitelist`
 - Configuration file structure update to version `2` *(Automatic merge from version 1 is implemented too)*
   - Moved all bot related keys to `"bot": {}`
   - Renamed `"api_key"` to `"token"`
@@ -20,6 +21,7 @@
   - `--systemd-service`
   - `--config-check`
   - `--no-config-check`
+  - `--no-color`
 
 
 [**2.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v2.0.0)

@@ -62,6 +62,7 @@ start - Start the bot
 | :------------------------------------------------ | :--------------------------------------------------------------------------------------- |
 | `-h`, `--help`                                    | show help message and exit                                                               |
 | `--version`                                       | show program's version number and exit                                                   |
+| `--no-color`                                      | disable colored output (ANSI escape sequences)                                           |
 | `--token` STR                                     | force the bot to run with token from the argument instead of the configuration file      |
 | `--whitelist` INT [INT ...]                       | force the bot to check whitelisted users from argument instead of the configuration file |
 | `--systemd-service` install/upgrade/remove/status | automated systemd service control for `linux` platforms                                  |

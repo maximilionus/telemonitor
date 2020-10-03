@@ -6,13 +6,15 @@ from aiogram.utils.markdown import bold, code
 
 from telemonitor import helpers as h, __version__
 from telemonitor.extensions import systemd_service
-from telemonitor.helpers import TM_Whitelist, TM_ControlInlineKB, cli_arguments_parser, PARSE_MODE, STRS
+from telemonitor.helpers import TM_Whitelist, TM_ControlInlineKB, cli_arguments_parser, tm_colorama, PARSE_MODE, STRS
 
 
 args = cli_arguments_parser()
 
 
 def run():
+    colorama = tm_colorama()
+    colorama.init(autoreset=True)
     chdir(path.dirname(__file__))
 
     h.init_logger(args.verbose)
@@ -58,7 +60,7 @@ def run():
                     logger.info(f'Successfully downloaded image(-s) to "{path.join(path.abspath(h.PATH_SHARED_DIR), "photos")}"')
                     await message.reply(text="Successfully downloaded image(-s)", parse_mode=PARSE_MODE, reply=False)
 
-    print(f'Bot is starting. Version: {__version__}')
+    print(f'{colorama.Fore.CYAN}{STRS.name}{colorama.Style.RESET_ALL} is starting. Version: {colorama.Fore.CYAN}{__version__}{colorama.Style.RESET_ALL}')
     executor.start_polling(
         dp,
         skip_updates=True,
