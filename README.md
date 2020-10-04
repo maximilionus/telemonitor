@@ -18,7 +18,7 @@
 
 
 ## Main Information
-Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiogram) for system monitoring. Bot is currently in progress of development, so new features will probably be `added`/`changed`/`deprecated`.
+Telemonitor is a telegram bot based on [aiogram](https://github.com/aiogram/aiogram) for system monitoring. Bot is currently in progress of development, so features can be `added`/`changed`/`deprecated`.
 
 
 ## Features
