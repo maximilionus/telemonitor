@@ -1,7 +1,7 @@
 # Telemonitor Changelog
 
 
-# [**3.0.1**](https://github.com/maximilionus/Telemonitor/releases/tag/v3.0.1) (2020-10-04)
+## [**3.0.1**](https://github.com/maximilionus/Telemonitor/releases/tag/v3.0.1) (2020-10-04)
 - Fixed configuration file check new keys insertion issue
 
 
