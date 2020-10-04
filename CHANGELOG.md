@@ -1,8 +1,10 @@
 # Telemonitor Changelog
 
 [Development](https://github.com/maximilionus/Telemonitor/tree/development)
-[**2.1.0**]()
-> This update is focused on improving `CLI` usage, features targeting the `Linux` platform and enhancing core structure
+[**3.0.0**]()
+> This major update is focused on improving `CLI` usage, features targeting the `Linux` platform and enhancing core structure with backward incompatible changes
+
+> Configuration file from versions `^1.0.0` and `^2.0.0` will be merged to major version `^3.0.0` without any problems
 
 - Automated systemd service creation for linux platforms implemented
 - Added colored output for CLI output to enhance readability

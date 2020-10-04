@@ -67,7 +67,7 @@ start - Start the bot
 | `--whitelist` INT [INT ...]                       | force the bot to check whitelisted users from argument instead of the configuration file |
 | `--systemd-service` install/upgrade/remove/status | automated systemd service control for `linux` platforms                                  |
 | `--dev`                                           | enable unstable development features                                                     |
-| `--verbose`, `-v`                                 | write more detailed information to log file                                              |
+| `--verbose`, `-v`                                 | write debug information to log file                                                      |
 | `--config-check`                                  | run config file initialization procedure and exit                                        |
 | `--no-config-check`                               | don't scan configuration file on start                                                   |
 
