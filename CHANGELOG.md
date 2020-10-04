@@ -1,6 +1,10 @@
 # Telemonitor Changelog
 
 
+# [**3.0.1**](https://github.com/maximilionus/Telemonitor/releases/tag/v3.0.1) (2020-10-04)
+- Fixed configuration file check new keys insertion issue
+
+
 ## [**3.0.0**](https://github.com/maximilionus/Telemonitor/releases/tag/v3.0.0) (2020-10-04)
 > This major update is focused on improving `CLI` usage, features targeting the `Linux` platform and enhancing core structure with backward incompatible changes
 

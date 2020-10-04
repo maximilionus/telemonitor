@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telemonitor"
-version = "3.0.0"
+version = "3.0.1"
 description = ""
 authors = ["maximilionus <maximilionuss@gmail.com>"]
 

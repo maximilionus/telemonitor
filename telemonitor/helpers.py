@@ -417,7 +417,11 @@ class TM_Config:
 
             for k, v in list(default_config.items()):
                 if type(v) == dict:
-                    up_to_date = add_new_keys(v, user_config[k])
+                    if k not in user_config:
+                        user_config[k] = v
+                        up_to_date = False
+                    else:
+                        up_to_date = add_new_keys(v, user_config[k])
                 elif k not in user_config:
                     up_to_date = False
                     user_config.update({k: v})
