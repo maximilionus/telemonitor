@@ -100,7 +100,7 @@ Configuration file will be automatically checked on each bot start to remove dep
 
 
 ## File Transfer System *(FTS)*
-This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./Telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
+This feature allows you to transfer files between bot's host machine and telegram user. Feature can be disabled by setting value of key `enable_file_transfer` to `false` in [configuration file](#configuration-file). All downloaded files will be saved to `./telemonitor/Shared` directory *(Does not exist by default and will be created on first `FTS` call)*.
 
 > Note that **all transfered files will be stored on Telegram servers!**
 
@@ -156,4 +156,4 @@ All list of features and supported platforms.
 
 
 ## Logging
-**Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./Telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`. Log folder will also be automatically cleaned after exceeding log files limit *(30 files)* inside of it. This limit can be changed in [configuration file](#configuration-file).
+**Telemonitor** also supports logging with python [`logging`](https://docs.python.org/3/library/logging.html) module. All logs will be saved to `./telemonitor/Logs/` in format: `TMLog_YYYY-MM-DD_HH-MM-SS.log`. Log folder will also be automatically cleaned after exceeding log files limit *(30 files)* inside of it. This limit can be changed in [configuration file](#configuration-file).
