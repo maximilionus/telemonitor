@@ -73,7 +73,7 @@ start - Start the bot
 
 
 ## Configuration File
-This configuration file will be generated on first start in `./Telemonitor/` directory and needs to be modified.
+This configuration file will be generated on first start in `./telemonitor/` directory and needs to be modified.
 
 Configuration file will be automatically checked on each bot start to remove deprecated and add new *keys*, so there's *no need* to remove it on each update. All actions with config file will be listed in [log file](#logging).
 
