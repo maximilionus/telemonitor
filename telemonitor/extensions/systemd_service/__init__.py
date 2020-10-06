@@ -49,11 +49,12 @@ def cli(mode: str):
             cfg_service = TM_Config.get()['systemd_service']
             service_exists = __systemd_config_exists()
             text = f"Telemonitor Systemd Service - Status\
-                     \n\n- Is installed: {colorama.Fore.CYAN}{service_exists}{colorama.Fore.RESET}"
+                     \n\n-> Is installed: {colorama.Fore.CYAN}{service_exists}{colorama.Fore.RESET}"
 
             if service_exists:
-                text += f"\n- Version: {colorama.Fore.CYAN}{cfg_service['version']}{colorama.Fore.RESET}\
-                          \n- Installation path: {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}"
+                text += f"\n-> Version : {colorama.Fore.CYAN}{cfg_service['version']}{colorama.Fore.RESET}\
+                          \n-> Service path : {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}\
+                          \n-> Startup script path : {colorama.Fore.CYAN}{path.abspath(__shell_launch_script_path)}{colorama.Fore.RESET}"
             print(text)
 
     else:
