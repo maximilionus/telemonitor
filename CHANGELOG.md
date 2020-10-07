@@ -2,8 +2,12 @@
 
 
 ## **3.1.0** Development
+
 ### Added
 - Added path of the service launch script to `--systemd-service status` output
+
+### Changed
+- Updated project dependencies to newer versions
 
 
 ## [**3.0.1**](https://github.com/maximilionus/Telemonitor/releases/tag/v3.0.1) (2020-10-04)
