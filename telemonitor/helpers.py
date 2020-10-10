@@ -307,7 +307,7 @@ class TM_Config:
             if args.token_overwrite and args.whitelist_overwrite:
                 text = "Reading bot token and whitelist from input arguments"
                 self.__logger.info(text)
-                print('[x] ' + text)
+                print_action(text)
             else:
                 # Generate config file and exit if no token and whitelist startup args provided
                 print("First, you need to configure it's values and then run the script again.")
