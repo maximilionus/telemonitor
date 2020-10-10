@@ -156,6 +156,7 @@ def cli_arguments_parser() -> object:
     adv_group.add_argument('--verbose', '-v', help='write debug information to log file', action='store_true')
     adv_group.add_argument('--config-check', action='store_true', help='run config file initialization procedure and exit', dest='config_check_only')
     adv_group.add_argument('--no-config-check', action='store_true', help="don't scan configuration file on start", dest='disable_config_check')
+    adv_group.add_argument('--no-logging', action='store_true', help='disable logging system', dest='disable_logging')
 
     return argparser.parse_args()
 

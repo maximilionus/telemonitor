@@ -70,6 +70,7 @@ start - Start the bot
 | `--verbose`, `-v`                                 | write debug information to log file                                                      |
 | `--config-check`                                  | run config file initialization procedure and exit                                        |
 | `--no-config-check`                               | don't scan configuration file on start                                                   |
+| `--no-logging`                                    | disable logging system                                                                   |
 
 
 ## Configuration File
@@ -80,19 +81,20 @@ Configuration file will be automatically checked on each bot start to remove dep
 ### Default Config
 ```jsonc
 {
-    "config_version": 2,            // Version of configuration file. Used for correct keys migration on update
-    "log_files_max": 30,            // Maximum amount of .log files in logs directory
+    "config_version": 2,                    // Version of configuration file. Used for correct keys migration on update
+    "log_files_max": 30,                    // Maximum amount of .log files in logs directory
     "bot": {
-        "token": "123:token__here", // Telegram bot api token
-        "whitelisted_users": [      // Array with all whitelisted users ids
-            000000000,              // Sample ids
+        "token": "123:token__here",         // Telegram bot api token
+        "whitelisted_users": [              // Array with all whitelisted users ids
+            000000000,                      // Sample ids
             111111111
         ],
-        "state_notifications": true, // Enable/Disable notification message on boot and shutdown event
-        "enable_file_transfer": true // Enable/Disable file transfer system
+        "state_notifications": true,        // Enable/Disable notification message on boot and shutdown event
+        "enable_file_transfer": true        // Enable/Disable file transfer system
     },
-    "systemd_service": {             // Dictionary for linux systemd service status
-        "version": -1                // Version of installed service file
+    "systemd_service": {                    // Dictionary for linux systemd service status
+        "version": -1,                      // Version of installed service file
+        "launcher_script_path": "./xxxx.sh" // Path to the service startup shell script
     }
 }
 

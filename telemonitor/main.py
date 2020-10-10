@@ -17,7 +17,11 @@ def run():
     colorama.init(autoreset=True)
     chdir(path.dirname(__file__))
 
-    h.init_logger(args.verbose)
+    if not args.disable_logging:
+        h.init_logger(args.verbose)
+    else:
+        h.print_action("Starting without logging module initialization")
+
     logger = logging.getLogger(__name__)
     logger.info("Telemonitor is starting")
 
