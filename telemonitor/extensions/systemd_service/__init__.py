@@ -1,28 +1,31 @@
 from sys import platform
 from logging import getLogger
 from os import path, remove
+from typing import Tuple, List
 
 from telemonitor.helpers import TM_Config, DEF_CFG, tm_colorama
 
 
-__version = 1
+__version = 2
 __logger = getLogger(__name__)
 
 # All relative paths are starting from root directory of module `telemonitor`,
 # Not from this directory!
 __service_config_template_path = './extensions/systemd_service/files/telemonitor-bot-template.service'
-__shell_launch_script_path = './extensions/systemd_service/files/telemonitor_start.sh'
 __service_config_final_path = '/lib/systemd/system/telemonitor-bot.service'
 
 
 def cli(mode: str):
     colorama = tm_colorama()
+    __shell_launch_script_path = TM_Config.get()["systemd_service"]["launcher_script_path"]
 
     if platform == 'linux':
         if mode == 'install':
             if service_install():
                 print("Successfully installed Telemonitor systemd service to your linux system!",
-                      f"\nName of the service is: {colorama.Fore.CYAN}{path.basename(__service_config_final_path)}{colorama.Fore.RESET}",
+                      f"\n-> Name of the service is: {colorama.Fore.CYAN}{path.basename(__service_config_final_path)}{colorama.Fore.RESET}",
+                      f"\n-> Installation path: {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}",
+                      f"\n-> Launch script path: {colorama.Fore.CYAN}{path.abspath(__shell_launch_script_path)}{colorama.Fore.RESET}",
                       "\n\nNow the only thing you need to do is to run this command to detect a new service:",
                       f"\n\t{colorama.Fore.GREEN}systemctl daemon-reload{colorama.Fore.RESET}",
                       "\n\nAnd now you can manually control this service with:",
@@ -37,7 +40,10 @@ def cli(mode: str):
                 print("Telemonitor systemd service is already installed on this system")
 
         elif mode == 'upgrade':
-            service_upgrade()
+            if service_upgrade():
+                service_upgrade()
+            else:
+                print(f"Service file is up-to-date. Current version is: {colorama.Fore.CYAN}{__version}")
 
         elif mode == 'remove':
             if service_remove():
@@ -57,6 +63,23 @@ def cli(mode: str):
                           \n-> Startup script path : {colorama.Fore.CYAN}{path.abspath(__shell_launch_script_path)}{colorama.Fore.RESET}"
             print(text)
 
+        elif mode == 'apply':
+            result = service_apply_changes()
+
+            if result[0] == 1:
+                text = "Successfully merged this changes to service file:"
+
+                for merged_item in result[1]:
+                    text += f"\n- {colorama.Fore.CYAN}{merged_item}{colorama.Fore.RESET}"
+
+                print(text)
+
+            elif result[0] == 2:
+                # Nothing to merge, up-to-date
+                print("Nothing to merge, service file is up-to-date with configuration path")
+            elif result[0] == 0:
+                print("Service is not installed, can't apply changes")
+
     else:
         print(f"This feature is available only for {colorama.Fore.CYAN}linux{colorama.Fore.RESET} platforms with systemd support.\nYour platform is {colorama.Fore.CYAN}{platform}{colorama.Fore.RESET}.")
         __logger.error(f"Requested feature is available only on 'linux' platforms with systemd support. Your platform is {platform}")
@@ -71,6 +94,7 @@ def service_install() -> bool:
         bool: Was service installed
     """
     __logger.info("Begin systemd service installation")
+    __shell_launch_script_path = TM_Config.get()["systemd_service"]["launcher_script_path"]
     colorama = tm_colorama()
     result = False
 
@@ -90,10 +114,9 @@ def service_install() -> bool:
         else:
             __update_cfg_values('install')
             __logger.info("Systemd service was successfully installed on system.")
-            result = True
-        finally:
             template_service_file.close()
             final_service_file.close()
+            result = True
 
     else:
         __logger.error(f"Service file already exists in '{__service_config_final_path}'")
@@ -159,12 +182,60 @@ def service_remove() -> bool:
             __logger.error(f"Can't remove systemd service file in {__service_config_final_path} due to {str(e)}")
         else:
             __update_cfg_values('remove')
-            __logger.info(f"Successfully removed service file on path {colorama.Fore.CYAN}{__service_config_final_path}")
+            __logger.info(f"Successfully removed service file on path {__service_config_final_path}")
             result = True
     else:
         __logger.error("Systemd service configuration file doesn't exist, nothing to remove")
 
     return result
+
+
+def service_apply_changes() -> Tuple[int, List[str]]:
+    """ Merge all changes from configuration file to systemd service file
+
+    Returns:
+        int:
+            0 - Service is not installed
+            1 - Successfully merged configuration file values to service file
+            2 - No changes to merge, up-to-date
+        list[str]: What was merged to service file
+    """
+    __logger.info("Begin service changes merging procedure")
+    result_int = 0
+    result_list = []
+
+    if __systemd_config_exists():
+        with open(__service_config_final_path, 'r+') as service_file:
+            service_text = service_file.readlines()
+
+            for line in service_text:
+                if "ExecStart=" in line:
+                    # Apply changes for launch script path
+                    launch_script_path_read = line.split('=')[1][:-1]
+                    launch_script_path_config = path.abspath(TM_Config.get()["systemd_service"]["launcher_script_path"])
+                    __logger.debug(f"Begin 'ExecStart' param check. Service file value: {launch_script_path_read}, Config file value: {launch_script_path_config}")
+
+                    if launch_script_path_read != launch_script_path_config:
+                        service_text[service_text.index(line)] = f"\tExecStart={launch_script_path_config}\n"
+                        result_int = 1
+                        result_list.append("Launcher script path")
+
+                    else:
+                        result_int = 2
+
+            if result_int == 1:
+                service_file.truncate(0)
+                service_file.seek(0)
+                service_file.writelines(service_text)
+                __logger.info("Successfully merged all changes from configuration file to service file")
+                __logger.debug(f"List of changes: {result_list}")
+
+            elif result_int == 2:
+                __logger.info("Service file is already up-to-date")
+    else:
+        __logger.info("Service is not installed, nothing to apply")
+
+    return (result_int, result_list)
 
 
 def __systemd_config_exists() -> bool:
@@ -182,11 +253,10 @@ def __update_cfg_values(mode: str):
     """ Update config values related to systemd service
 
     Args:
-        mode (str): [
+        mode (str):
             'install' - Set config values to fresh install version.
             'upgrade' - Upgrade value of `version` key in config.
             'remove' - Reset `systemd_service` dict to default values.
-        ]
     """
     options = ('install', 'upgrade', 'remove')
     if mode not in options:
@@ -195,13 +265,11 @@ def __update_cfg_values(mode: str):
     cfg = TM_Config.get()
 
     if mode == 'install':
-        cfg['systemd_service'] = {
-            "version": __version
-        }
+        cfg['systemd_service']["version"] = __version
     elif mode == 'upgrade':
         cfg['systemd_service']["version"] = __version
     elif mode == 'remove':
-        cfg['systemd_service'] = DEF_CFG['systemd_service']
+        cfg['systemd_service']['version'] = DEF_CFG['systemd_service']['version']
 
     TM_Config.write(cfg)
     __logger.debug(f"Updated configuration dict 'systemd_service' to mode '{mode}'")

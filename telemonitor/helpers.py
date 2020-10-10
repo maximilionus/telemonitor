@@ -32,7 +32,8 @@ DEF_CFG = {
         "enable_file_transfer": True
     },
     "systemd_service": {
-        "version": -1
+        "version": -1,
+        "launcher_script_path": "./extensions/systemd_service/files/telemonitor_start.sh"
     }
 }
 
@@ -143,7 +144,7 @@ def cli_arguments_parser() -> object:
         description=STRS.description,
     )
     argparser.add_argument('--version', action='version', version=f'%(prog)s {__version__}')
-    argparser.add_argument('--systemd-service', action='store', choices=['install', 'upgrade', 'remove', 'status'], dest='systemd_service', help='linux systemd Telemonitor service control')
+    argparser.add_argument('--systemd-service', action='store', choices=['install', 'upgrade', 'apply', 'remove', 'status'], dest='systemd_service', help='linux systemd Telemonitor service control')
     argparser.add_argument('--no-color', action='store_true', dest='disable_colored_output', help="disable colored output (ANSI escape sequences)")
 
     bot_group = argparser.add_argument_group('bot control optional arguments')

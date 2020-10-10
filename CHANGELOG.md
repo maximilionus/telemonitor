@@ -5,6 +5,11 @@
 
 ### Added
 - Added path of the service launch script to `--systemd-service status` output
+- Feature to change path to the `systemd` service launch `.sh` script with `--systemd-service apply` command to merge all changes to service file
+
+### Fixed
+- Fixed .service file formatting and upgraded it to version 2
+- Fixed `--systemd-service upgrade` behavior
 
 ### Changed
 - Updated project dependencies to newer versions
