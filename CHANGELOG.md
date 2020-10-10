@@ -1,17 +1,18 @@
 # Telemonitor Changelog
 
 
-## **3.1.0** Development
+## [**3.1.0** Development](https://github.com/maximilionus/Telemonitor/tree/development)
 
 ### Added
-- Added path of the service launch script to `--systemd-service status` output
 - Feature to change path to the `systemd` service launch `.sh` script with `--systemd-service apply` command to merge all changes to service file
+- Path of the service launch script now will be showed in `--systemd-service status` output
 
 ### Fixed
-- Fixed .service file formatting and upgraded it to version 2
+- Fixed .service file formatting
 - Fixed `--systemd-service upgrade` behavior
 
 ### Changed
+- Systemd `.service` file was upgraded to new version *(See [README](./README.md#systemd-service-control) for upgrade instructions)*
 - Updated project dependencies to newer versions
 
 

@@ -82,7 +82,7 @@ def init_logger(is_verbose: bool = False):
         log_files = [f for f in os.listdir(DIR_LOG) if os.path.isfile(os.path.join(DIR_LOG, f))]
         log_files_len = len(log_files)
         if log_files_len > (TM_Config.get().get("log_files_max", MAX_LOGS) if TM_Config.is_exist() else MAX_LOGS):
-            print(f"- Clearing logs folder. {colorama.Fore.RED}{log_files_len}{colorama.Fore.RESET} files will be removed")
+            print_action(f"Clearing logs folder. {colorama.Fore.RED}{log_files_len}{colorama.Fore.RESET} files will be removed")
             for log_file in log_files:
                 os.remove(os.path.join(DIR_LOG, log_file))
 
@@ -158,6 +158,25 @@ def cli_arguments_parser() -> object:
     adv_group.add_argument('--no-config-check', action='store_true', help="don't scan configuration file on start", dest='disable_config_check')
 
     return argparser.parse_args()
+
+
+def print_action(text: str, *args, start=""):
+    """ Special function for printing the actions in standardized way
+
+    Args:
+        text (str): Text to print to the STDOUT
+        start (str): Insert any text in the beginning of final string
+    """
+    __colorama = tm_colorama()
+
+    def __colored_print(text: str):
+        print(start + __colorama.Fore.LIGHTCYAN_EX + "[+] " + __colorama.Fore.RESET + text)
+
+    __colored_print(text)
+
+    if len(args) > 0:
+        for text in args:
+            __colored_print(text)
 
 
 class TM_ControlInlineKB:
@@ -288,7 +307,7 @@ class TM_Config:
             if args.token_overwrite and args.whitelist_overwrite:
                 text = "Reading bot token and whitelist from input arguments"
                 self.__logger.info(text)
-                print('- ' + text)
+                print('[x] ' + text)
             else:
                 # Generate config file and exit if no token and whitelist startup args provided
                 print("First, you need to configure it's values and then run the script again.")
