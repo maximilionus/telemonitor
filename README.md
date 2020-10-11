@@ -113,7 +113,7 @@ This feature allows you to transfer files between bot's host machine and telegra
 
 
 ## Systemd Service Control
-There's speical feature available **only** for `linux` platforms with `systemd` software suite. It provides user-friendly CLI to control *(install, remove, upgrade)* **systemd service**.
+There's special feature available **only** for `linux` platforms with `systemd` software suite. It provides user-friendly CLI to control *(install, remove, upgrade)* **systemd service**.
 
 ### How to
 > Please note that you must run Telemonitor as root to install the service correctly.
