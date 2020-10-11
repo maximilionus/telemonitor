@@ -5,6 +5,9 @@ __pycache__
 # Editable packages
 *.egg-info
 
+# Python venv
+.venv
+
 # Logs
 Logs
 

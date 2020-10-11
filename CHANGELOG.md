@@ -4,6 +4,7 @@
 ## [**3.1.0** Development](https://github.com/maximilionus/Telemonitor/tree/development)
 
 ### Added
+- Feature to start **Telemonitor** with native python virtual environment *(No poetry)*
 - Feature to change path to the `systemd` service launch `.sh` script with `--systemd-service apply` command to merge all changes to service file
 - Logging system can now be fully disabled with `--no-logging` startup argument
 - Path of the service launch script now will be showed in `--systemd-service status` output
