@@ -3,7 +3,7 @@ from logging import getLogger
 from os import path, remove
 from typing import Tuple, List
 
-from telemonitor.helpers import TM_Config, DEF_CFG, tm_colorama, print_action
+from telemonitor.core import TM_Config, DEF_CFG, tm_colorama, print_action
 
 
 __version_service_file = 2

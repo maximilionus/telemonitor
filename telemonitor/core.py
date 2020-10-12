@@ -3,16 +3,13 @@ import json
 import logging
 import platform
 import argparse
-import subprocess
 from math import floor
 from time import strftime, asctime
-from sys import platform as sys_platform
 
 import colorama
 from uptime import uptime
-from aiogram import types, Dispatcher, Bot
+from aiogram.types import ParseMode
 from aiogram.utils.markdown import code, bold, italic
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 
 from telemonitor import __version__
 
@@ -53,7 +50,7 @@ def tm_colorama() -> colorama:
     Returns:
         colorama: Colorama module ready for use
     """
-    from telemonitor.main import args
+    from telemonitor.__main__ import args
 
     colorama_obj = colorama
 
@@ -180,57 +177,6 @@ def print_action(text: str, *args, start=""):
             __colored_print(text)
 
 
-class TM_ControlInlineKB:
-    def __init__(self, bot: Bot, dispatcher: Dispatcher):
-        """ Generate telegram inline keyboard for bot.
-
-        Args:
-            bot (Bot): aiogram Bot object.
-            dispatcher (Dispatcher): aiogram Dispatcher object.
-        """
-        self.__inline_kb = InlineKeyboardMarkup()
-
-        self.__btn_get_sysinfo = InlineKeyboardButton('Sys Info', callback_data='button-sysinfo-press')
-        self.__btn_reboot = InlineKeyboardButton('Reboot', callback_data='button-reboot-press')
-        self.__btn_shutdown = InlineKeyboardButton('Shutdown', callback_data='button-shutdown-press')
-
-        self.__inline_kb.add(self.__btn_get_sysinfo)
-        self.__inline_kb.row(self.__btn_reboot, self.__btn_shutdown)
-
-        @dispatcher.callback_query_handler()
-        async def __callback_ctrl_press(callback_query: types.CallbackQuery):
-            if not TM_Whitelist.is_whitelisted(callback_query.from_user.id): return False
-
-            data = callback_query.data
-            if data == 'button-sysinfo-press':
-                await bot.answer_callback_query(callback_query.id)
-                message = construct_sysinfo()
-                await bot.send_message(callback_query.from_user.id, message, parse_mode=PARSE_MODE)
-
-            elif data == 'button-reboot-press':
-                await bot.answer_callback_query(callback_query.id, STRS.reboot, show_alert=True)
-
-                if sys_platform == 'linux': subprocess.run(['shutdown', '-r', 'now'])
-                elif sys_platform == 'darwin': subprocess.run(['shutdown', '-r', 'now'])
-                elif sys_platform == 'win32': subprocess.run(['shutdown', '/r', '/t', '0'])
-
-            elif data == 'button-shutdown-press':
-                await bot.answer_callback_query(callback_query.id, STRS.shutdown, show_alert=True)
-
-                if sys_platform == 'linux': subprocess.run(['shutdown', 'now'])
-                elif sys_platform == 'darwin': subprocess.run(['shutdown', '-h', 'now'])
-                elif sys_platform == 'win32': subprocess.run(['shutdown', '/s', '/t', '0'])
-
-    @property
-    def keyboard(self) -> object:
-        """ Get generated inline keyboard.
-
-        Returns:
-            object: Inline keyboard.
-        """
-        return self.__inline_kb
-
-
 class TM_Whitelist:
     __logger = logging.getLogger(__name__)
 
@@ -256,7 +202,7 @@ class TM_Whitelist:
         Returns:
             list: All whitelisted users.
         """
-        from telemonitor.main import args
+        from telemonitor.__main__ import args
         cls.__logger.debug('Whitelist read request')
         whitelist = TM_Config.get()["bot"]["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
         cls.__logger.debug(f"Whitelist content: {whitelist}")
@@ -297,7 +243,7 @@ class TM_Config:
         If the configuration file is not found - it will be created.
         If the configuration file is found - it will be checked for all necessary values.
         """
-        from telemonitor.main import args
+        from telemonitor.__main__ import args
 
         colorama = tm_colorama()
         if not self.is_exist():
