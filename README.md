@@ -46,7 +46,7 @@ Development features are in progress of development and *are unstable*, so they'
    ```
 3. After all packages successfully installed, run:
    ```bash
-   poetry run telem
+   poetry run telemonitor
    ```
 4. On the first start `Telemonitor` will generate `config.json` *([about config](#configuration-file))* and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
 
@@ -122,20 +122,20 @@ There's special feature available **only** for `linux` platforms with `systemd` 
 
 - Installation of service is pretty easy. You should just run
   ```bash
-  poetry run telem --systemd-service install
+  poetry run telemonitor --systemd-service install
   ```
 - To uninstall the service, run:
   ```bash
-  poetry run telem --systemd-service remove
+  poetry run telemonitor --systemd-service remove
   ```
 - Getting service status *(like service version)* can be done this way
   ```bash
-  poetry run telem --systemd-service status
+  poetry run telemonitor --systemd-service status
   ```
   > Note that this CLI command does not display service detailed information. To get this one you should use system command `systemctl status service-name-here`
 - Checking installed service for any available upgrade
   ```bash
-  poetry run telem --systemd-service upgrade
+  poetry run telemonitor --systemd-service upgrade
   ```
   > If any updates are available, you will be prompted to confirm their installation.
 
