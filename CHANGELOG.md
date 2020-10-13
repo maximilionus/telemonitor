@@ -182,7 +182,7 @@
 # Development Releases
 
 
-## [**4.0.0-dev**](https://github.com/maximilionus/Telemonitor/releases/tag/v4.0.0-dev1)
+## [**4.0.0-dev1**](https://github.com/maximilionus/Telemonitor/releases/tag/v4.0.0-dev1)
 
 ### Added
 - Feature to start **Telemonitor** with native python `pip` *(No poetry)*
