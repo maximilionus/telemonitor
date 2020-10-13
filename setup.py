@@ -1,11 +1,9 @@
 from setuptools import setup
 
-from telemonitor import __version__
-
 
 setup(
     name="telemonitor",
-    version=__version__,
+    version="4.0.0",
     author="maximilionus",
     packages=["telemonitor"]
 )
