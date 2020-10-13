@@ -20,8 +20,5 @@ telem = "telemonitor.__main__:run"
 telemonitor = "telemonitor.__main__:run"
 
 [build-system]
-requires = [
-  "setuptools >= 40.9.0",
-  "wheel",
-]
+requires = ["setuptools >= 40.9.0"]
 build-backend = "setuptools.build_meta"
