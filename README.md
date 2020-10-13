@@ -5,6 +5,8 @@
     - [Stable](#stable)
     - [Development](#development)
   - [How to run](#how-to-run)
+    - [Poetry](#poetry)
+    - [Native PIP](#native-pip)
   - [Bot Commands](#bot-commands)
   - [Optional Arguments](#optional-arguments)
   - [Configuration File](#configuration-file)
@@ -39,6 +41,8 @@ Development features are in progress of development and *are unstable*, so they'
 
 ## How to run
 > Note that bot requires access to some system commands *(such as `shutdown` and `reboot`)*, so if you want all features to work as intended - run all commands from `root` *(with `sudo`)* or from user who has full access to those commands.
+
+### Poetry
 1. Install [`poetry`](https://github.com/python-poetry/poetry) dependency manager with `pip` or [from source](https://github.com/python-poetry/poetry#installation).
 2. Go to cloned `Telemonitor` repository folder and run:
    ```bash
@@ -50,6 +54,35 @@ Development features are in progress of development and *are unstable*, so they'
    ```
 4. On the first start `Telemonitor` will generate `config.json` *([about config](#configuration-file))* and exit. You will have to add `bot token` and `whitelisted users` to `config.json` and then go to `3.`
 
+### Native PIP
+> From version `4.0.0`, **Telemonitor** has support for native `pip` installation and further usage
+
+1. *(optional)* Initialize python virtual environment and activate it
+   > Use virtual environment only if you don't want to install **Telemonitor** system-wide
+
+   ```bash
+   # Create virtual environment
+   python3 -m venv .venv
+
+   # Activate it
+   source .venv/bin/activate      # Linux
+   # -----
+   source .venv/Scripts/activate  # Windows
+   ```
+2. Install project dependencies
+   ```bash
+   pip install -r requirements.txt
+   ```
+3. Install **Telemonitor** project
+   ```bash
+   pip install -e .
+   ```
+4. Everything is ready! Now you can run **Telemonitor** with command
+   ```bash
+   python3 -m telemonitor
+   # OR
+   telemonitor
+   ```
 
 ## Bot Commands
 ```
