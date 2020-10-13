@@ -75,7 +75,7 @@ Development features are in progress of development and *are unstable*, so they'
    ```
 3. Install **Telemonitor** project
    ```bash
-   pip install -e .
+   python setup.py develop
    ```
 4. Everything is ready! Now you can run **Telemonitor** with command
    ```bash
