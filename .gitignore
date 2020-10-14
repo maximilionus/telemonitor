@@ -12,8 +12,8 @@ __pycache__
 Logs
 
 # Telemonitor
-Telemonitor/config.json
-Telemonitor/Shared
+telemonitor/config.json
+telemonitor/Shared
 
 # VS Code config
 .vscode
