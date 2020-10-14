@@ -15,6 +15,7 @@
     - [How to](#how-to)
   - [Systemd Service Control](#systemd-service-control)
     - [How to](#how-to-1)
+    - [Customization](#customization)
   - [Supported Platforms](#supported-platforms)
   - [Logging](#logging)
 
@@ -169,6 +170,9 @@ There's special feature available **only** for `linux` platforms with `systemd` 
   poetry run telemonitor --systemd-service upgrade
   ```
   > If any updates are available, you will be prompted to confirm their installation.
+
+### Customization
+By default, **Telemonitor** service uses launch script on path `./telemonitor/extensions/systemd_service/files/telemonitor_start.sh`. This behaviour can be changed by editing the [configuration file](#configuration-file)
 
 
 ## Supported Platforms
