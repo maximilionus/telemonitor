@@ -109,6 +109,7 @@ def service_install() -> bool:
             e_text = f"Can't write systemd service config file to {__service_config_final_path} due to {str(e)}"
             print(f"{colorama.Fore.RED}{e_text}\n")
             __logger.error(e_text)
+            exit()
         else:
             __update_cfg_values('install')
             __logger.info("Systemd service was successfully installed on system.")

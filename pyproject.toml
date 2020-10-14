@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "telemonitor"
-version = "4.0.0"
+version = "4.0.0-dev1"
 description = ""
 authors = ["maximilionus <maximilionuss@gmail.com>"]
 
@@ -20,5 +20,5 @@ telem = "telemonitor.__main__:run"
 telemonitor = "telemonitor.__main__:run"
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["setuptools >= 40.9.0"]
+build-backend = "setuptools.build_meta"

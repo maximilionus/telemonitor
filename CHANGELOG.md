@@ -1,30 +1,14 @@
 # Telemonitor Changelog
 
+- [Stable Releases](#stable-releases)
+- [Development Releases](#development-releases)
 
-## [**4.0.0** Development](https://github.com/maximilionus/Telemonitor/tree/dev/4.0.0)
 
-### Added
-- Feature to start **Telemonitor** with native python virtual environment *(No poetry)*
-- Feature to change path to the `systemd` service launch `.sh` script with `--systemd-service apply` command to merge all changes to service file
-- New command for starting the app with *poetry*: `poetry run telemonitor`. Old `poetry run telem` can still be used
-- Logging system can now be fully disabled with `--no-logging` startup argument
-- Path of the service launch script now will be showed in `--systemd-service status` output
-
-### Fixed
-- Fixed .service file formatting
-- Fixed `--systemd-service upgrade` behavior
-
-### Changed
-- Code structure major changes:
-  - Main launch script is now `__main__.py`
-  - Bot-related part split to `bot.py`
-  - Startup procedure split to `startup.py`
-  - `helpers` module renamed to `core`
-- Systemd `.service` file was upgraded to new version *(See [README](./README.md#systemd-service-control) for upgrade instructions)*
-- Updated project dependencies to newer versions
+# Stable Releases
 
 
 ## [**3.0.1**](https://github.com/maximilionus/Telemonitor/releases/tag/v3.0.1) (2020-10-04)
+
 ### Fixed
 - Fixed configuration file check new keys insertion issue
 
@@ -172,3 +156,38 @@
 - Bot functionality done
 - Added whitelist
 - Added configuration file r/w
+
+
+# Development Releases
+
+
+## **4.0.0**-devN
+
+### Changed
+- Enhanced *systemd service* launch script
+  - Support for native virtual environment start
+  - More detailed output
+  - Usage documentation
+
+
+## [**4.0.0-dev1**](https://github.com/maximilionus/Telemonitor/releases/tag/v4.0.0-dev1)
+
+### Added
+- Feature to start **Telemonitor** with native python `pip` *(No poetry)*
+- Feature to change path to the `systemd` service launch `.sh` script with `--systemd-service apply` command to merge all changes to service file
+- New command for starting the app with *poetry*: `poetry run telemonitor`. Old `poetry run telem` can still be used
+- Logging system can now be fully disabled with `--no-logging` startup argument
+- Path of the service launch script now will be showed in `--systemd-service status` output
+
+### Fixed
+- Fixed .service file formatting
+- Fixed `--systemd-service upgrade` behavior
+
+### Changed
+- Code structure major changes:
+  - Main launch script is now `__main__.py`
+  - Bot-related part split to `bot.py`
+  - Startup procedure split to `startup.py`
+  - `helpers` module renamed to `core`
+- Systemd `.service` file was upgraded to new version *(See [README](./README.md#systemd-service-control) for upgrade instructions)*
+- Updated project dependencies to newer versions
