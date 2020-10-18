@@ -3,7 +3,9 @@ from logging import getLogger
 from os import path, remove
 from typing import Tuple, List
 
-from telemonitor.core import TM_Config, DEF_CFG, tm_colorama, print_action
+from telemonitor.core.cli import tm_colorama, print_action, ask_user_permission
+from telemonitor.core.io import TM_Config
+from telemonitor.core.constants import DEF_CFG
 
 
 __version_service_file = 2
@@ -23,8 +25,7 @@ def cli(mode: str):
         if mode == 'install':
             if service_install():
                 print("Successfully installed Telemonitor systemd service to your linux system!",
-                      "\n- Service",
-                      f"\n\tName: {colorama.Fore.CYAN}{path.basename(__service_config_final_path)}{colorama.Fore.RESET}",
+                      f"\n\n\tName: {colorama.Fore.CYAN}{path.basename(__service_config_final_path)}{colorama.Fore.RESET}",
                       f"\n\tPath: {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}",
                       f"\n\tVersion: {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET}",
                       "\n\nNow, the only thing you need to do is to run this command to detect a new service:",
@@ -41,8 +42,15 @@ def cli(mode: str):
                 print("Telemonitor systemd service is already installed on this system")
 
         elif mode == 'upgrade':
-            if not service_upgrade():
-                print(f"Service file is up-to-date. Current version is: {colorama.Fore.CYAN}{__version_service_file}")
+            result, upgrade_info = service_upgrade()
+            if result == 0:
+                print("Service is not installed on this systemd - nothing to upgrade")
+            elif result == 1:
+                print(f"Service file was successfully upgraded from version {colorama.Fore.CYAN}{upgrade_info[0]}{colorama.Fore.RESET} to version {colorama.Fore.CYAN}{upgrade_info[1]}{colorama.Fore.RESET}")
+            elif result == 2:
+                print("Service upgrade was cancelled")
+            elif result == 3:
+                print(f"Nothing to upgrade, your installed service is up-to-date (version: {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET})")
 
         elif mode == 'remove':
             if service_remove():
@@ -53,13 +61,16 @@ def cli(mode: str):
         elif mode == 'status':
             cfg_service = TM_Config.get()['systemd_service']
             service_exists = __systemd_config_exists()
-            text = f"Telemonitor Systemd Service - Status\
-                     \n\n- Is installed: {colorama.Fore.CYAN}{service_exists}{colorama.Fore.RESET}"
 
             if service_exists:
-                text += f"\n- Version : {colorama.Fore.CYAN}{cfg_service['version']}{colorama.Fore.RESET}\
-                          \n- Service path : {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}\
-                          \n- Startup script path : {colorama.Fore.CYAN}{path.abspath(__shell_launch_script_path)}{colorama.Fore.RESET}"
+                text = f"Telemonitor Systemd Service - Status\
+                          \n\n{'● Is installed ':<22}○ {colorama.Fore.CYAN}{service_exists}{colorama.Fore.RESET}"\
+                          f"\n{'● Version ':<22}○ {colorama.Fore.CYAN}{cfg_service['version']}{colorama.Fore.RESET}\
+                          \n{'● Service path ':<22}○ {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}\
+                          \n{'● Startup script path ':<22}○ {colorama.Fore.CYAN}{path.abspath(__shell_launch_script_path)}{colorama.Fore.RESET}"
+            else:
+                text = f"Telemonitor Systemd Service - Status\
+                     \n\n{'● Is installed ' }○ {colorama.Fore.CYAN}{service_exists}{colorama.Fore.RESET}"
             print(text)
 
         elif mode == 'apply':
@@ -123,42 +134,52 @@ def service_install() -> bool:
     return result
 
 
-def service_upgrade() -> bool:
+def service_upgrade() -> Tuple[int, Tuple[int, int]]:
     """ Check systemd service config files and upgrade them to newer version if available
 
     Returns:
-        bool: Was service updated
+        int:
+            0 - Service is not installed, can't upgrade
+            1 - Was successfully upgraded
+            2 - Upgrade was cancelled
+            3 - Nothing to upgrade, service is up-to-date
+        tuple  # This tuple contains valuable information only on successful upgrade
+            int - Previously installed version (default: 0)
+            int - New installed version (default: 0)
     """
-    was_updated = False
+    was_updated = 0
+    from_version_to = ()
+
     colorama = tm_colorama()
     __logger.info("Begin systemd service upgrade check")
 
     if __systemd_config_exists():
         config = TM_Config.get()
 
-        builtin_version = __version_service_file
         installed_version = config["systemd_service"]["version"]
 
-        if installed_version < builtin_version:
-            choice = input(f"Service file can be upgraded to version {colorama.Fore.CYAN}{builtin_version}{colorama.Fore.RESET} (Current version: {colorama.Fore.CYAN}{installed_version}{colorama.Fore.RESET}). Upgrade? {colorama.Fore.GREEN}[y/n]{colorama.Fore.RESET}: ")
-            if choice[0].lower() == 'y':
+        if installed_version < __version_service_file:
+            agreement = ask_user_permission(f"Service file can be upgraded to version {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET} (Current version: {colorama.Fore.CYAN}{installed_version}{colorama.Fore.RESET}). Upgrade?")
+
+            if agreement:
                 print_action(f"Removing installed version {colorama.Fore.CYAN}{installed_version}{colorama.Fore.RESET} service from system...", start="\n")
                 if service_remove():
                     print_action(
                         "Installed version of service was removed",
-                        f"Installing the systemd service version {colorama.Fore.CYAN}{builtin_version}{colorama.Fore.RESET} to system..."
+                        f"Installing the systemd service version {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET} to system..."
                     )
                     if service_install():
                         print_action("Successfully installed new systemd service")
                         __update_cfg_values('upgrade')
-                        print(f"\nService was successfully upgraded from version {colorama.Fore.CYAN}{installed_version}{colorama.Fore.RESET} to {colorama.Fore.CYAN}{builtin_version}{colorama.Fore.RESET}")
-                        was_updated = True
+                        from_version_to = (installed_version, __version_service_file)
+                        was_updated = 1
+            else:
+                was_updated = 2
+        else: was_updated = 3
     else:
-        text = "Service is not installed, nothing to upgrade"
-        __logger.info(text)
-        print(text)
+        __logger.info("Service is not installed, upgrade action failed")
 
-    return was_updated
+    return was_updated, from_version_to
 
 
 def service_remove() -> bool:

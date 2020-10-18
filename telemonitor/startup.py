@@ -1,32 +1,34 @@
 import logging
 from os import chdir, path
 
-from colorama import init as colorama_prepare
+import colorama
 
-from telemonitor import core
-from telemonitor.extensions import systemd_service
-from telemonitor.bot import start_telegram_bot
+from .core.io import TM_Config
+from .core.cli import print_action
+from .bot import start_telegram_bot
+from .core.logging import init_logger
+from .extensions import systemd_service
 
 
 def run():
     from telemonitor.__main__ import args
 
-    colorama_prepare(autoreset=True)
+    colorama.init(autoreset=True)
     chdir(path.dirname(__file__))
 
     if not args.disable_logging:
-        core.init_logger(args.verbose)
+        init_logger(args.verbose)
     else:
-        core.print_action("Starting without logging module initialization")
+        print_action("Starting without logging module initialization")
 
     logger = logging.getLogger(__name__)
     logger.info("Telemonitor is starting")
 
     # Initialize config
-    core.TM_Config()
+    TM_Config()
     if args.config_check_only: exit()
 
-    if args.systemd_service is not None:
-        systemd_service.cli(args.systemd_service)
+    if hasattr(args, 'service_cli_command'):
+        systemd_service.cli(args.service_cli_command)
 
     start_telegram_bot()

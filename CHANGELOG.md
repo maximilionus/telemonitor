@@ -163,11 +163,21 @@
 
 ## **4.0.0**-devN
 
+
+### Added
+- New optional startup argument `-y` or `--yes` for giving automatic confirmation to any user action request.
+
 ### Changed
+- Systemd service CLI was remade to more user-friendly variant
+  - Startup argument renamed from `--systemd-service` to `service`
+  - Help for `service` usage
+  - Enhanced output for `service`: `install` and `status` commands
+  - Fixed `service upgrade` behaviour
 - Enhanced *systemd service* launch script
   - Support for native virtual environment start
   - More detailed output
   - Usage documentation
+- Core was split from a single `core.py` module to sorted by functionality modules in directory `core`
 
 
 ## [**4.0.0-dev1**](https://github.com/maximilionus/Telemonitor/releases/tag/v4.0.0-dev1)
