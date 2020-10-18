@@ -90,19 +90,19 @@ start - Start the bot
 
 
 ## Optional Arguments
-| Arg                                                     | Description                                                                              |
-| :------------------------------------------------------ | :--------------------------------------------------------------------------------------- |
-| `-h`, `--help`                                          | show help message and exit                                                               |
-| `--version`                                             | show program's version number and exit                                                   |
-| `--no-color`                                            | disable colored output (ANSI escape sequences)                                           |
-| `--token` STR                                           | force the bot to run with token from the argument instead of the configuration file      |
-| `--whitelist` INT [INT ...]                             | force the bot to check whitelisted users from argument instead of the configuration file |
-| `--systemd-service` install/upgrade/remove/status/apply | automated systemd service control for `linux` platforms                                  |
-| `--dev`                                                 | enable unstable development features                                                     |
-| `--verbose`, `-v`                                       | write debug information to log file                                                      |
-| `--config-check`                                        | run config file initialization procedure and exit                                        |
-| `--no-config-check`                                     | don't scan configuration file on start                                                   |
-| `--no-logging`                                          | disable logging system                                                                   |
+| Arg                                           | Description                                                                              |
+| :-------------------------------------------- | :--------------------------------------------------------------------------------------- |
+| `service` install/upgrade/remove/status/apply | automated `systemd service` control for `linux` platforms                                |
+| `-h`, `--help`                                | show help message and exit                                                               |
+| `--version`                                   | show program's version number and exit                                                   |
+| `--no-color`                                  | disable colored output (ANSI escape sequences)                                           |
+| `--token` STR                                 | force the bot to run with token from the argument instead of the configuration file      |
+| `--whitelist` INT [INT ...]                   | force the bot to check whitelisted users from argument instead of the configuration file |
+| `--dev`                                       | enable unstable development features                                                     |
+| `--verbose`, `-v`                             | write debug information to log file                                                      |
+| `--config-check`                              | run config file initialization procedure and exit                                        |
+| `--no-config-check`                           | don't scan configuration file on start                                                   |
+| `--no-logging`                                | disable logging system                                                                   |
 
 
 ## Configuration File
@@ -154,25 +154,33 @@ There's special feature available **only** for `linux` platforms with `systemd` 
 
 - Installation of service is pretty easy. You should just run
   ```bash
-  poetry run telemonitor --systemd-service install
+  poetry run telemonitor service install
   ```
 - To uninstall the service, run:
   ```bash
-  poetry run telemonitor --systemd-service remove
+  poetry run telemonitor service remove
   ```
 - Getting service status *(like service version)* can be done this way
   ```bash
-  poetry run telemonitor --systemd-service status
+  poetry run telemonitor service status
   ```
   > Note that this CLI command does not display service detailed information. To get this one you should use system command `systemctl status service-name-here`
 - Checking installed service for any available upgrade
   ```bash
-  poetry run telemonitor --systemd-service upgrade
+  poetry run telemonitor service upgrade
   ```
   > If any updates are available, you will be prompted to confirm their installation.
 
+You can also get `CLI` help for for `service` command by running
+```bash
+poetry run telemonitor service --help
+```
+
 ### Customization
-By default, **Telemonitor** service uses launch script on path `./telemonitor/extensions/systemd_service/files/telemonitor_start.sh`. This behaviour can be changed by editing the [configuration file](#configuration-file)
+By default, **Telemonitor** service uses launch script on path `./telemonitor/extensions/systemd_service/files/telemonitor_start.sh` with argument `poetry`. This behaviour can be changed by following this steps:
+```ruby
+----- [WIP] -----
+```
 
 
 ## Supported Platforms

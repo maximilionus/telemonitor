@@ -18,7 +18,7 @@ DEF_CFG = {
     },
     "systemd_service": {
         "version": -1,
-        "launcher_script_path": "./extensions/systemd_service/files/telemonitor_start.sh"
+        "launcher_script_path": "./extensions/systemd_service/files/telemonitor_start.sh poetry"
     }
 }
 
