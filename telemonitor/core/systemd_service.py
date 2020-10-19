@@ -1,25 +1,24 @@
 from sys import platform
-from logging import getLogger
 from os import path, remove
+from logging import getLogger
 from typing import Tuple, List
 
-from telemonitor.core.cli import tm_colorama, print_action, ask_user_permission
-from telemonitor.core.io import TM_Config
-from telemonitor.core.constants import DEF_CFG
-
+from .io import TM_Config
+from .constants import DEF_CFG
+from .cli import tm_colorama, ask_user_permission, print_action
 
 __version_service_file = 2
 __logger = getLogger(__name__)
 
-# All relative paths are starting from root directory of module `telemonitor`,
+# All relative paths starts from root directory of module `telemonitor`,
 # Not from this directory!
-__service_config_template_path = './extensions/systemd_service/files/telemonitor-bot-template.service'
+__service_config_template_path = './data/systemd_service/telemonitor-bot-template.service'
 __service_config_final_path = '/lib/systemd/system/telemonitor-bot.service'
 
 
 def cli(mode: str):
     colorama = tm_colorama()
-    __shell_launch_script_path = TM_Config.get()["systemd_service"]["launcher_script_path"]
+    __shell_launch_script_path = TM_Config.read()["systemd_service"]["launcher_script_path"]
 
     if platform == 'linux':
         if mode == 'install':
@@ -59,7 +58,7 @@ def cli(mode: str):
                 print("Systemd service configuration file doesn't exist, nothing to remove")
 
         elif mode == 'status':
-            cfg_service = TM_Config.get()['systemd_service']
+            cfg_service = TM_Config.read()['systemd_service']
             service_exists = __systemd_config_exists()
 
             if service_exists:
@@ -103,7 +102,7 @@ def service_install() -> bool:
         bool: Was service installed
     """
     __logger.info("Begin systemd service installation")
-    __shell_launch_script_path = TM_Config.get()["systemd_service"]["launcher_script_path"]
+    __shell_launch_script_path = TM_Config.read()["systemd_service"]["launcher_script_path"]
     colorama = tm_colorama()
     result = False
 
@@ -154,7 +153,7 @@ def service_upgrade() -> Tuple[int, Tuple[int, int]]:
     __logger.info("Begin systemd service upgrade check")
 
     if __systemd_config_exists():
-        config = TM_Config.get()
+        config = TM_Config.read()
 
         installed_version = config["systemd_service"]["version"]
 
@@ -190,6 +189,8 @@ def service_remove() -> bool:
             True - Successfully removed service from system
             False - Can't remove service
     """
+    from .cli import tm_colorama
+
     __logger.info("Begin systemd service removal")
     result = False
     colorama = tm_colorama()
@@ -232,7 +233,7 @@ def service_apply_changes() -> Tuple[int, List[str]]:
                 if "ExecStart=" in line:
                     # Apply changes for launch script path
                     launch_script_path_read = line.split('=')[1][:-1]
-                    launch_script_path_config = path.abspath(TM_Config.get()["systemd_service"]["launcher_script_path"])
+                    launch_script_path_config = path.abspath(TM_Config.read()["systemd_service"]["launcher_script_path"])
                     __logger.debug(f"Begin 'ExecStart' param check. Service file value: {launch_script_path_read}, Config file value: {launch_script_path_config}")
 
                     if launch_script_path_read != launch_script_path_config:
@@ -282,7 +283,7 @@ def __update_cfg_values(mode: str):
     if mode not in options:
         raise Exception(f"Option '{mode}' doesn't exist in this function")
 
-    cfg = TM_Config.get()
+    cfg = TM_Config.read()
 
     if mode == 'install':
         cfg['systemd_service']["version"] = __version_service_file

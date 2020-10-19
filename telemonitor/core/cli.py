@@ -2,8 +2,8 @@ import argparse
 
 import colorama
 
-from .. import __version__
 from . import constants
+from .. import __version__
 
 
 def tm_colorama() -> colorama:
@@ -106,3 +106,17 @@ def ask_user_permission(ask_text: str) -> bool:
     input_action = input(f"{ask_text} {__colorama.Fore.GREEN}[y/n]{__colorama.Fore.RESET}: ")
 
     return True if input_action.lower() == 'y' else False
+
+
+def handle_startup_args(args_namespace: object):
+    """ Handle special arguments in startup script
+
+    Args:
+        args_namespace (object): Namespace with all arguments
+    """
+    if args_namespace.config_check_only: exit()
+
+    from . import systemd_service
+
+    if hasattr(args_namespace, 'service_cli_command'):
+        systemd_service.cli(args_namespace.service_cli_command)

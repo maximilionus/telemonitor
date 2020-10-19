@@ -6,6 +6,9 @@ from . import constants
 from .cli import tm_colorama, print_action
 
 
+logger = getLogger(__name__)
+
+
 def init_shared_dir() -> bool:
     """ Initialize dir for shared files
 
@@ -21,8 +24,28 @@ def init_shared_dir() -> bool:
         return False
 
 
+def create_dirs_on_path(path_to_check: str, is_dir=False) -> bool:
+    """ Create all non existent directories in provided path
+
+    Args:
+        path_to_check (str): Path to check
+        is_dir (bool): Is checking path should lead to the directory
+
+    Returns:
+        bool: Was any directory created
+    """
+    was_created = False
+    path_to_check = path_to_check if is_dir else path.dirname(path_to_check)
+
+    if not path.isdir(path_to_check):
+        makedirs(path_to_check)
+        logger.debug(f"Created directories for input path '{path_to_check}'")
+        was_created = True
+
+    return was_created
+
+
 class TM_Whitelist:
-    __logger = getLogger(__name__)
 
     @classmethod
     def is_whitelisted(cls, user_id: int) -> bool:
@@ -47,9 +70,9 @@ class TM_Whitelist:
             list: All whitelisted users.
         """
         from telemonitor.__main__ import args
-        cls.__logger.debug('Whitelist read request')
-        whitelist = TM_Config.get()["bot"]["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
-        cls.__logger.debug(f"Whitelist content: {whitelist}")
+        logger.debug('Whitelist read request')
+        whitelist = TM_Config.read()["bot"]["whitelisted_users"] if args.whitelist_overwrite is None else args.whitelist_overwrite
+        logger.debug(f"Whitelist content: {whitelist}")
 
         return whitelist
 
@@ -69,17 +92,16 @@ class TM_Whitelist:
         for user in cls.get_whitelist():
             try:
                 await bot.send_message(user, message, parse_mode=constants.PARSE_MODE)
-                cls.__logger.debug(f"Successfully sent startup message to user [{user}]")
+                logger.debug(f"Successfully sent startup message to user [{user}]")
                 return True
             except Exception as e:
-                cls.__logger.error(f"Can't send message to whitelisted user [{user}]: < {str(e)} >")
+                logger.error(f"Can't send message to whitelisted user [{user}]: < {str(e)} >")
                 return False
 
 
 class TM_Config:
     __config = {}
     __last_mod_time = None
-    __logger = getLogger(__name__)
 
     def __init__(self):
         """
@@ -90,14 +112,16 @@ class TM_Config:
         from telemonitor.__main__ import args
 
         colorama = tm_colorama()
+        create_dirs_on_path(path.dirname(constants.PATH_CFG))
+
         if not self.is_exist():
             self.create()
-            self.__logger.info("First start detected")
+            logger.info("First start detected")
             print(f"Config file was generated in {colorama.Fore.CYAN}{path.abspath(constants.PATH_CFG)}")
 
             if args.token_overwrite and args.whitelist_overwrite:
                 text = "Reading bot token and whitelist from input arguments"
-                self.__logger.info(text)
+                logger.info(text)
                 print_action(text)
             else:
                 # Generate config file and exit if no token and whitelist startup args provided
@@ -107,7 +131,7 @@ class TM_Config:
         cfg = self.get()
 
         if args.disable_config_check:
-            self.__logger.info('Configuration file check skipped')
+            logger.info('Configuration file check skipped')
         else:
             config_check_result = self.config_check(cfg)
 
@@ -123,13 +147,13 @@ class TM_Config:
             if config_check_result[1]:
                 log_message += " and deprecated keys were removed"
 
-            self.__logger.info(log_message)
+            logger.info(log_message)
 
     @classmethod
     def create(cls):
         """ Create config file with default values. """
         cls.write(constants.DEF_CFG)
-        cls.__logger.info("Config file was generated.")
+        logger.info("Config file was generated.")
 
     @classmethod
     def write(cls, config_dict: dict):
@@ -140,10 +164,10 @@ class TM_Config:
         """
         with open(constants.PATH_CFG, 'wt') as f:
             json.dump(config_dict, f, indent=4)
-        cls.__logger.debug("Successful write request to configuration file")
+        logger.debug("Successful write request to configuration file")
 
     @classmethod
-    def get(cls) -> dict:
+    def read(cls) -> dict:
         """ Get json configuration file values.
 
         If config file wasn't changed from last read - get values from variable,
@@ -219,7 +243,12 @@ class TM_Config:
                     }
                 })
                 is_updated = True
-                cls.__logger.info("Successfully merged config file to version 2")
+                logger.info("Successfully merged config file from version 1 to version 2")
+
+            elif config["config_version"] == 2:
+                config["systemd_service"]["launcher_script_path"] = constants.DEF_CFG["systemd_service"]["launcher_script_path"]
+                is_updated = True
+                logger.info("Successfully merged config file from version 2 to version 3")
 
             return is_updated
 
@@ -236,7 +265,7 @@ class TM_Config:
                 elif k not in user_config:
                     up_to_date = False
                     user_config.update({k: v})
-                    cls.__logger.debug(f"Adding new key '{k}' to user configuration file")
+                    logger.debug(f"Adding new key '{k}' to user configuration file")
 
             return up_to_date
 
@@ -249,7 +278,7 @@ class TM_Config:
                 elif k not in default_config:
                     has_deprecated_values = True
                     del(user_config[k])
-                    cls.__logger.debug(f"Removing deprecated key '{k}' from user configuration file")
+                    logger.debug(f"Removing deprecated key '{k}' from user configuration file")
 
             return has_deprecated_values
 

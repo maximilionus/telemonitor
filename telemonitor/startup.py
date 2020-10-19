@@ -4,10 +4,9 @@ from os import chdir, path
 import colorama
 
 from .core.io import TM_Config
-from .core.cli import print_action
+from .core.cli import print_action, handle_startup_args
 from .bot import start_telegram_bot
 from .core.logging import init_logger
-from .extensions import systemd_service
 
 
 def run():
@@ -26,9 +25,7 @@ def run():
 
     # Initialize config
     TM_Config()
-    if args.config_check_only: exit()
 
-    if hasattr(args, 'service_cli_command'):
-        systemd_service.cli(args.service_cli_command)
+    handle_startup_args(args)
 
     start_telegram_bot()

@@ -21,7 +21,7 @@ def start_telegram_bot():
 
     logger = logging.getLogger(__name__)
     colorama = tm_colorama()
-    cfg = TM_Config.get()
+    cfg = TM_Config.read()
     api_token = cfg["bot"]["token"] if args.token_overwrite is None else args.token_overwrite
 
     bot = Bot(token=api_token)

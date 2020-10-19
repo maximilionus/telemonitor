@@ -3,7 +3,7 @@ import logging
 from time import strftime, asctime
 
 from .. import __version__
-from .io import TM_Config
+from .io import TM_Config, create_dirs_on_path
 from .constants import DIR_LOG, MAX_LOGS, STRS
 from .cli import tm_colorama, print_action
 
@@ -16,12 +16,10 @@ def init_logger(is_verbose: bool = False):
     """
     colorama = tm_colorama()
 
-    if not os.path.isdir(DIR_LOG):
-        os.makedirs(DIR_LOG)
-    else:
+    if not create_dirs_on_path(DIR_LOG, True):
         log_files = [f for f in os.listdir(DIR_LOG) if os.path.isfile(os.path.join(DIR_LOG, f))]
         log_files_len = len(log_files)
-        if log_files_len > (TM_Config.get().get("log_files_max", MAX_LOGS) if TM_Config.is_exist() else MAX_LOGS):
+        if log_files_len > (TM_Config.read().get("log_files_max", MAX_LOGS) if TM_Config.is_exist() else MAX_LOGS):
             print_action(f"Clearing logs folder. {colorama.Fore.RED}{log_files_len}{colorama.Fore.RESET} files will be removed")
             for log_file in log_files:
                 os.remove(os.path.join(DIR_LOG, log_file))
