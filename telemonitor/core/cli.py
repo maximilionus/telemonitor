@@ -67,17 +67,25 @@ def cli_arguments_parser() -> object:
     return argparser.parse_args()
 
 
-def print_action(text: str, *args, start=""):
+def print_action(text: str, *args, start="", action_status='ok'):
     """ Special function for printing the actions in standardized way
 
     Args:
         text (str): Text to print to the STDOUT
         start (str): Insert any text in the beginning of final string
+        action_status (str): Color the output in color, that matches action status
+            'ok'
+            'error'
     """
     __colorama = tm_colorama()
 
+    if action_status == 'ok':
+        color_fg = __colorama.Fore.LIGHTCYAN_EX
+    else:
+        color_fg = __colorama.Fore.RED
+
     def __colored_print(text: str):
-        print(start + __colorama.Fore.LIGHTCYAN_EX + "[+] " + __colorama.Fore.RESET + text)
+        print(start + color_fg + "\u25CF " + __colorama.Fore.RESET + text)
 
     __colored_print(text)
 

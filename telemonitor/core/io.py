@@ -117,7 +117,7 @@ class TM_Config:
         if not self.is_exist():
             self.create()
             logger.info("First start detected")
-            print(f"Config file was generated in {colorama.Fore.CYAN}{path.abspath(constants.PATH_CFG)}")
+            print_action(f"Config file was generated in {colorama.Fore.CYAN}{path.abspath(constants.PATH_CFG)}")
 
             if args.token_overwrite and args.whitelist_overwrite:
                 text = "Reading bot token and whitelist from input arguments"
@@ -128,7 +128,7 @@ class TM_Config:
                 print("First, you need to configure it's values and then run the script again.")
                 exit()
 
-        cfg = self.get()
+        cfg = self.read()
 
         if args.disable_config_check:
             logger.info('Configuration file check skipped')

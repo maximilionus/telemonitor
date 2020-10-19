@@ -23,39 +23,40 @@ def cli(mode: str):
     if platform == 'linux':
         if mode == 'install':
             if service_install():
-                print("Successfully installed Telemonitor systemd service to your linux system!",
-                      f"\n\n\tName: {colorama.Fore.CYAN}{path.basename(__service_config_final_path)}{colorama.Fore.RESET}",
-                      f"\n\tPath: {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}",
-                      f"\n\tVersion: {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET}",
-                      "\n\nNow, the only thing you need to do is to run this command to detect a new service:",
-                      f"\n\t{colorama.Fore.GREEN}systemctl daemon-reload{colorama.Fore.RESET}",
-                      "\n\nAnd now you can manually control this service with:",
-                      f"\n\t{colorama.Fore.GREEN}systemctl status {path.basename(__service_config_final_path)}{colorama.Fore.RESET}  # View Telemonitor logs and current status",
-                      f"\n\t{colorama.Fore.GREEN}systemctl start {path.basename(__service_config_final_path)}{colorama.Fore.RESET}   # Start the Telemonitor service",
-                      f"\n\t{colorama.Fore.GREEN}systemctl stop {path.basename(__service_config_final_path)}{colorama.Fore.RESET}    # Stop the Telemonitor service"
-                      f"\n\t{colorama.Fore.GREEN}systemctl enable {path.basename(__service_config_final_path)}{colorama.Fore.RESET}  # Start Telemonitor service on system launch"
-                      f"\n\t{colorama.Fore.GREEN}systemctl disable {path.basename(__service_config_final_path)}{colorama.Fore.RESET} # Disable Telemonitor service automatic startup",
-                      "\n\nPlease note, that the commands above will require root user privileges to run."
-                      )
+                print_action("Successfully installed Telemonitor systemd service to your linux system!")
+                print(
+                    f"\n\tName: {colorama.Fore.CYAN}{path.basename(__service_config_final_path)}{colorama.Fore.RESET}",
+                    f"\n\tPath: {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET}",
+                    f"\n\tVersion: {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET}",
+                    "\n\nNow, the only thing you need to do is to run this command to detect a new service:",
+                    f"\n\t{colorama.Fore.GREEN}systemctl daemon-reload{colorama.Fore.RESET}",
+                    "\n\nAnd now you can manually control this service with:",
+                    f"\n\t{colorama.Fore.GREEN}systemctl status {path.basename(__service_config_final_path)}{colorama.Fore.RESET}  # View Telemonitor logs and current status",
+                    f"\n\t{colorama.Fore.GREEN}systemctl start {path.basename(__service_config_final_path)}{colorama.Fore.RESET}   # Start the Telemonitor service",
+                    f"\n\t{colorama.Fore.GREEN}systemctl stop {path.basename(__service_config_final_path)}{colorama.Fore.RESET}    # Stop the Telemonitor service"
+                    f"\n\t{colorama.Fore.GREEN}systemctl enable {path.basename(__service_config_final_path)}{colorama.Fore.RESET}  # Start Telemonitor service on system launch"
+                    f"\n\t{colorama.Fore.GREEN}systemctl disable {path.basename(__service_config_final_path)}{colorama.Fore.RESET} # Disable Telemonitor service automatic startup",
+                    "\n\nPlease note, that the commands above will require root user privileges to run."
+                )
             else:
-                print("Telemonitor systemd service is already installed on this system")
+                print_action("Telemonitor systemd service is already installed on this system")
 
         elif mode == 'upgrade':
             result, upgrade_info = service_upgrade()
             if result == 0:
-                print("Service is not installed on this systemd - nothing to upgrade")
+                print_action("Service is not installed on this systemd - nothing to upgrade", action_status='error')
             elif result == 1:
-                print(f"Service file was successfully upgraded from version {colorama.Fore.CYAN}{upgrade_info[0]}{colorama.Fore.RESET} to version {colorama.Fore.CYAN}{upgrade_info[1]}{colorama.Fore.RESET}")
+                print_action(f"Service file was successfully upgraded from version {colorama.Fore.CYAN}{upgrade_info[0]}{colorama.Fore.RESET} to version {colorama.Fore.CYAN}{upgrade_info[1]}{colorama.Fore.RESET}")
             elif result == 2:
-                print("Service upgrade was cancelled")
+                print_action("Service upgrade was cancelled", action_status='error')
             elif result == 3:
-                print(f"Nothing to upgrade, your installed service is up-to-date (version: {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET})")
+                print_action(f"Nothing to upgrade, your installed service is up-to-date (version: {colorama.Fore.CYAN}{__version_service_file}{colorama.Fore.RESET})")
 
         elif mode == 'remove':
             if service_remove():
-                print("Successfully removed service from system")
+                print_action("Successfully removed service from system")
             else:
-                print("Systemd service configuration file doesn't exist, nothing to remove")
+                print_action("Systemd service configuration file doesn't exist, nothing to remove", action_status='error')
 
         elif mode == 'status':
             cfg_service = TM_Config.read()['systemd_service']
@@ -76,20 +77,19 @@ def cli(mode: str):
             result = service_apply_changes()
 
             if result[0] == 1:
-                text = "Successfully merged this changes to service file:"
+                print_action("Successfully merged this changes to service file:")
 
                 for merged_item in result[1]:
-                    text += f"\n- {colorama.Fore.CYAN}{merged_item}{colorama.Fore.RESET}"
-
-                print(text)
+                    print(f"\n- {colorama.Fore.CYAN}{merged_item}{colorama.Fore.RESET}")
 
             elif result[0] == 2:
-                print("Nothing to merge, service file is up-to-date")
+                print_action("Nothing to merge, service file is up-to-date")
             elif result[0] == 0:
-                print("Service is not installed, can't apply changes")
+                print_action("Service is not installed, can't apply changes", action_status='error')
 
     else:
-        print(f"This feature is available only for {colorama.Fore.CYAN}linux{colorama.Fore.RESET} platform with systemd support.\nYour platform is {colorama.Fore.CYAN}{platform}{colorama.Fore.RESET}.")
+        print_action(f"This feature is available only for {colorama.Fore.CYAN}linux{colorama.Fore.RESET} platform with systemd support.\nYour platform is {colorama.Fore.CYAN}{platform}{colorama.Fore.RESET}.",
+                     action_status='error')
         __logger.error(f"Requested feature is available only on 'linux' platforms with systemd support. Your platform is {platform}")
 
     exit()
@@ -117,7 +117,7 @@ def service_install() -> bool:
             final_service_file.write(text)
         except Exception as e:
             e_text = f"Can't write systemd service config file to {__service_config_final_path} due to {str(e)}"
-            print(f"{colorama.Fore.RED}{e_text}\n")
+            print_action(f"{colorama.Fore.RED}{e_text}\n", action_status='error')
             __logger.error(e_text)
             exit()
         else:
@@ -199,7 +199,7 @@ def service_remove() -> bool:
         try:
             remove(__service_config_final_path)
         except Exception as e:
-            print(f"Can't remove systemd service file in {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET} due to {colorama.Fore.RED}{str(e)}")
+            print_action(f"Can't remove systemd service file in {colorama.Fore.CYAN}{__service_config_final_path}{colorama.Fore.RESET} due to {colorama.Fore.RED}{str(e)}", action_status='error')
             __logger.error(f"Can't remove systemd service file in {__service_config_final_path} due to {str(e)}")
         else:
             __update_cfg_values('remove')
