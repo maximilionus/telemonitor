@@ -178,6 +178,7 @@
   - More detailed output
   - Usage documentation
 - Core was split from a single `core.py` module to sorted by functionality modules in directory `core`
+- Replaced `.core.io.TM_Config` - `get()` method with `read()`, `get()` is now deprecated and can't be used no more
 
 
 ## [**4.0.0-dev1**](https://github.com/maximilionus/Telemonitor/releases/tag/v4.0.0-dev1)
