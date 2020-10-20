@@ -165,7 +165,8 @@
 
 
 ### Added
-- New optional startup argument `-y` or `--yes` for giving automatic confirmation to any user action request.
+- `CLI` global arguments added
+  - New optional startup argument `-y` or `--yes` for giving automatic confirmation to any user action request.
 
 ### Changed
 - Systemd service CLI was remade to more user-friendly variant
