@@ -80,7 +80,7 @@ Development features are in progress of development and *are unstable*, so they'
    ```
 4. Everything is ready! Now you can run **Telemonitor** with command
    ```bash
-   python3 -m telemonitor
+   python -m telemonitor
    ```
 
 ## Bot Commands
